@@ -1,570 +1,459 @@
 /*
  * ============================================================
+ *  MINI PROJECT PEMROGRAMAN DASAR (BAHASA C)
  *  KELOMPOK 3 - SISTEM RENTAL FILM
  * ============================================================
- *  Mahasiswa 1 : Data Pelanggan & Film   (do-while, validasi)
- *  Mahasiswa 2 : Proses Sewa & Denda     (if-else, perulangan)
- *  Mahasiswa 3 : Transaksi & Pengujian   (bukti, status, uji)
- * ============================================================
- *  Tidak menggunakan array dan tidak menggunakan konsep OOP.
- *  Data film disimpan dalam switch-case.
- *  Status ketersediaan film disimpan di variabel global.
+ *  Batasan Program:
+ *  - Menggunakan bahasa C
+ *  - Tidak menggunakan array data, struct (OOP), maupun pointer
+ *  - Menggunakan struktur kontrol: if, if-else, while, do-while, for
+ *
+ *  Pembagian Tugas:
+ *  - Mahasiswa 1 : Data Pelanggan & Film (Input, Validasi, do-while)
+ *  - Mahasiswa 2 : Proses Sewa & Denda   (Biaya, Lama, Denda, if-else & loop)
+ *  - Mahasiswa 3 : Transaksi & Pengujian (Bukti Rental, Status, Pengujian)
  * ============================================================
  */
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
+/* Konstanta aturan rental */
 #define JUMLAH_FILM         5
-#define MAKS_DURASI_SEWA    7       /* maksimal sewa 7 hari            */
-#define DENDA_NORMAL        5000    /* denda hari ke-1 s/d ke-3        */
-#define DENDA_BERAT         10000   /* denda mulai hari ke-4 dst       */
+#define MAKS_DURASI_SEWA    7
+#define DENDA_NORMAL        5000    /* Denda keterlambatan hari ke-1 s/d ke-3 */
+#define DENDA_BERAT         10000   /* Denda keterlambatan hari ke-4 dst      */
 #define BATAS_DENDA_NORMAL  3
 
-/* Status ketersediaan tiap film (1 = Tersedia, 0 = Dipinjam) */
+/* Variabel global status ketersediaan film (1 = Tersedia, 0 = Dipinjam) */
 int film1_tersedia = 1;
 int film2_tersedia = 1;
 int film3_tersedia = 1;
 int film4_tersedia = 1;
 int film5_tersedia = 1;
 
+/* Variabel global data pelanggan & transaksi berjalan */
+char idPelanggan[20];
+char namaPelanggan[50];
+int  pilihanFilm;
+int  durasiSewa;
+int  lamaPinjam;
+int  hariTerlambat;
+long hargaPerHari;
+long biayaSewa;
+long denda;
+long totalBayar;
+long uangBayar;
+long kembalian;
+int  statusTerlambat; /* 0 = TEPAT WAKTU, 1 = TERLAMBAT */
+
 /* ======================== FUNGSI BANTU ========================== */
 
-void bersihkanBuffer(void)
-{
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
-}
-
-int bacaInt(const char *prompt)
-{
-    int nilai, ok;
-    do {
-        printf("%s", prompt);
-        ok = scanf("%d", &nilai);
-        if (ok == EOF) {
-            printf("\nInput berakhir. Program dihentikan.\n");
-            exit(0);
-        }
-        bersihkanBuffer();
-        if (ok != 1)
-            printf("  [!] Input harus berupa angka.\n");
-    } while (ok != 1);
-    return nilai;
-}
-
-void bacaString(const char *prompt, char *buf, int ukuran)
-{
-    char *nl;
-    do {
-        printf("%s", prompt);
-        if (fgets(buf, ukuran, stdin) == NULL) {
-            printf("\nInput berakhir. Program dihentikan.\n");
-            exit(0);
-        }
-        nl = strchr(buf, '\n');
-        if (nl != NULL) *nl = '\0';
-        else bersihkanBuffer();
-        if (strlen(buf) == 0)
-            printf("  [!] Input tidak boleh kosong.\n");
-    } while (strlen(buf) == 0);
-}
-
-void garis(char c, int n)
+/* Mencetak garis pembatas menggunakan perulangan for */
+void cetakGaris(char simbol, int panjang)
 {
     int i;
-    for (i = 0; i < n; i++) putchar(c);
-    putchar('\n');
+    for (i = 0; i < panjang; i++) {
+        printf("%c", simbol);
+    }
+    printf("\n");
 }
 
-/* Mengambil judul film berdasarkan nomor (1-5) */
-void ambilJudul(int no, char *hasil)
+/* Membersihkan sisa karakter di buffer input menggunakan while */
+void bersihkanInput(void)
 {
-    switch (no) {
-        case 1: strcpy(hasil, "Avengers: Endgame"); break;
-        case 2: strcpy(hasil, "Laskar Pelangi");    break;
-        case 3: strcpy(hasil, "Toy Story 4");       break;
-        case 4: strcpy(hasil, "Pengabdi Setan 2");  break;
-        case 5: strcpy(hasil, "Interstellar");      break;
-        default: strcpy(hasil, "-");
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {
+        /* kosong - hanya membuang sisa karakter */
     }
 }
 
-/* Mengambil kode film */
-void ambilKode(int no, char *hasil)
+/* Menampilkan nama & kode film berdasarkan nomor urut (tanpa array/struct) */
+void cetakNamaFilm(int no)
 {
-    switch (no) {
-        case 1: strcpy(hasil, "F001"); break;
-        case 2: strcpy(hasil, "F002"); break;
-        case 3: strcpy(hasil, "F003"); break;
-        case 4: strcpy(hasil, "F004"); break;
-        case 5: strcpy(hasil, "F005"); break;
-        default: strcpy(hasil, "-");
+    if (no == 1) {
+        printf("Avengers: Endgame (F001)");
+    } else if (no == 2) {
+        printf("Laskar Pelangi (F002)");
+    } else if (no == 3) {
+        printf("Toy Story 4 (F003)");
+    } else if (no == 4) {
+        printf("Pengabdi Setan 2 (F004)");
+    } else if (no == 5) {
+        printf("Interstellar (F005)");
+    } else {
+        printf("Tidak diketahui");
     }
 }
 
-/* Mengambil genre film */
-void ambilGenre(int no, char *hasil)
+/* Mengambil harga sewa film per hari */
+long ambilHargaFilm(int no)
 {
-    switch (no) {
-        case 1: strcpy(hasil, "Action");  break;
-        case 2: strcpy(hasil, "Drama");   break;
-        case 3: strcpy(hasil, "Animasi"); break;
-        case 4: strcpy(hasil, "Horor");   break;
-        case 5: strcpy(hasil, "Sci-Fi");  break;
-        default: strcpy(hasil, "-");
-    }
+    if (no == 1) return 8000;
+    else if (no == 2) return 6000;
+    else if (no == 3) return 7000;
+    else if (no == 4) return 7500;
+    else if (no == 5) return 9000;
+    else return 0;
 }
 
-/* Mengambil harga per hari */
-long ambilHarga(int no)
+/* Mengecek status ketersediaan film (1 = Tersedia, 0 = Dipinjam) */
+int cekFilmTersedia(int no)
 {
-    switch (no) {
-        case 1: return 8000;
-        case 2: return 6000;
-        case 3: return 7000;
-        case 4: return 7500;
-        case 5: return 9000;
-        default: return 0;
-    }
-}
-
-/* Mengecek apakah film tersedia */
-int cekTersedia(int no)
-{
-    switch (no) {
-        case 1: return film1_tersedia;
-        case 2: return film2_tersedia;
-        case 3: return film3_tersedia;
-        case 4: return film4_tersedia;
-        case 5: return film5_tersedia;
-        default: return 0;
-    }
+    if (no == 1) return film1_tersedia;
+    else if (no == 2) return film2_tersedia;
+    else if (no == 3) return film3_tersedia;
+    else if (no == 4) return film4_tersedia;
+    else if (no == 5) return film5_tersedia;
+    else return 0;
 }
 
 /* Mengubah status ketersediaan film */
-void setTersedia(int no, int status)
+void ubahStatusFilm(int no, int status)
 {
-    switch (no) {
-        case 1: film1_tersedia = status; break;
-        case 2: film2_tersedia = status; break;
-        case 3: film3_tersedia = status; break;
-        case 4: film4_tersedia = status; break;
-        case 5: film5_tersedia = status; break;
-    }
-}
-
-/* Mengubah angka menjadi format rupiah, contoh: 24000 -> "Rp 24.000" */
-void formatRupiah(long nilai, char *hasil)
-{
-    char tmp[32];
-    int i, j, sisa, len;
-
-    sprintf(tmp, "%ld", nilai);
-    len = (int)strlen(tmp);
-    strcpy(hasil, "Rp ");
-    j = 3;
-    for (i = 0; i < len; i++) {
-        hasil[j++] = tmp[i];
-        sisa = len - i - 1;
-        if (sisa > 0 && sisa % 3 == 0)
-            hasil[j++] = '.';
-    }
-    hasil[j] = '\0';
+    if (no == 1) film1_tersedia = status;
+    else if (no == 2) film2_tersedia = status;
+    else if (no == 3) film3_tersedia = status;
+    else if (no == 4) film4_tersedia = status;
+    else if (no == 5) film5_tersedia = status;
 }
 
 /* =================================================================
  *  MAHASISWA 1 - DATA PELANGGAN & FILM
+ *  - Input ID dan nama pelanggan
+ *  - Menampilkan pilihan film
+ *  - Input & validasi pilihan film menggunakan do-while
  * ================================================================= */
 
-void inputPelanggan(char *id, char *nama)
+void inputDataPelanggan(void)
 {
-    printf("\n=== DATA PELANGGAN ===\n");
-    bacaString("ID Pelanggan   : ", id, 15);
-    bacaString("Nama Pelanggan : ", nama, 50);
+    printf("\n=== INPUT DATA PELANGGAN ===\n");
+    printf("Masukkan ID Pelanggan   : ");
+    scanf("%19s", idPelanggan);
+    bersihkanInput();
+
+    printf("Masukkan Nama Pelanggan : ");
+    scanf(" %49[^\n]", namaPelanggan);
+    bersihkanInput();
 }
 
-void tampilkanFilm(void)
+void tampilkanDaftarFilm(void)
 {
-    int i;
-    char kode[6], judul[40], genre[15], harga[20];
-
-    printf("\n=== DAFTAR FILM ===\n");
-    garis('-', 70);
-    printf("%-3s %-6s %-20s %-9s %-12s %-10s\n",
-           "No", "Kode", "Judul", "Genre", "Harga/Hari", "Status");
-    garis('-', 70);
-    for (i = 1; i <= JUMLAH_FILM; i++) {
-        ambilKode(i, kode);
-        ambilJudul(i, judul);
-        ambilGenre(i, genre);
-        formatRupiah(ambilHarga(i), harga);
-        printf("%-3d %-6s %-20s %-9s %-12s %-10s\n",
-               i, kode, judul, genre, harga,
-               cekTersedia(i) ? "Tersedia" : "Dipinjam");
-    }
-    garis('-', 70);
+    printf("\n=== DAFTAR PILIHAN FILM ===\n");
+    cetakGaris('-', 66);
+    printf("No  Kode   Judul Film           Genre     Harga/Hari   Status\n");
+    cetakGaris('-', 66);
+    printf("1   F001   Avengers: Endgame    Action    Rp 8000      %s\n",
+           film1_tersedia ? "Tersedia" : "Dipinjam");
+    printf("2   F002   Laskar Pelangi       Drama     Rp 6000      %s\n",
+           film2_tersedia ? "Tersedia" : "Dipinjam");
+    printf("3   F003   Toy Story 4          Animasi   Rp 7000      %s\n",
+           film3_tersedia ? "Tersedia" : "Dipinjam");
+    printf("4   F004   Pengabdi Setan 2     Horor     Rp 7500      %s\n",
+           film4_tersedia ? "Tersedia" : "Dipinjam");
+    printf("5   F005   Interstellar         Sci-Fi    Rp 9000      %s\n",
+           film5_tersedia ? "Tersedia" : "Dipinjam");
+    cetakGaris('-', 66);
 }
 
-/* Input + validasi pilihan film menggunakan do-while.
- * Mengembalikan nomor film (1-5), atau -1 jika semua dipinjam. */
-int pilihFilm(void)
+void inputDanValidasiFilm(void)
 {
-    int pilihan, valid, adaTersedia = 0;
-    int i;
-    char judul[40];
+    int valid = 0;
+    int hasilBaca;
 
-    for (i = 1; i <= JUMLAH_FILM; i++)
-        if (cekTersedia(i)) adaTersedia = 1;
-    if (!adaTersedia) {
-        printf("  [!] Semua film sedang dipinjam.\n");
-        return -1;
-    }
-
+    /* Validasi pilihan film menggunakan do-while */
     do {
-        pilihan = bacaInt("Pilih nomor film (1-5): ");
-        valid = 0;
-        if (pilihan < 1 || pilihan > JUMLAH_FILM) {
-            printf("  [!] Pilihan tidak valid. Masukkan angka 1-%d.\n", JUMLAH_FILM);
-        } else if (!cekTersedia(pilihan)) {
-            ambilJudul(pilihan, judul);
-            printf("  [!] Film \"%s\" sedang dipinjam. Pilih film lain.\n", judul);
+        printf("Pilih nomor film (1-%d)  : ", JUMLAH_FILM);
+        hasilBaca = scanf("%d", &pilihanFilm);
+        bersihkanInput();
+
+        if (hasilBaca != 1) {
+            printf("  [!] Error: Input harus berupa angka!\n");
+            valid = 0;
+        } else if (pilihanFilm < 1 || pilihanFilm > JUMLAH_FILM) {
+            printf("  [!] Error: Pilihan film tidak valid! Pilih nomor 1 s/d %d.\n", JUMLAH_FILM);
+            valid = 0;
+        } else if (cekFilmTersedia(pilihanFilm) == 0) {
+            printf("  [!] Error: Film sedang dipinjam! Silakan pilih film lain.\n");
+            valid = 0;
         } else {
             valid = 1;
         }
-    } while (!valid);
+    } while (valid == 0);
 
-    ambilJudul(pilihan, judul);
-    printf("  Film dipilih: %s\n", judul);
-    return pilihan;
+    printf("  >> Film dipilih: ");
+    cetakNamaFilm(pilihanFilm);
+    printf("\n");
 }
 
 /* =================================================================
  *  MAHASISWA 2 - PROSES SEWA & DENDA
+ *  - Menentukan biaya sewa
+ *  - Menghitung lama peminjaman
+ *  - Menghitung denda keterlambatan (menggunakan for & if-else)
+ *  - Menentukan status pengembalian (menggunakan if-else)
  * ================================================================= */
 
-int tahunKabisat(int tahun)
+void inputDurasiDanLamaPinjam(void)
 {
-    if ((tahun % 4 == 0 && tahun % 100 != 0) || tahun % 400 == 0)
-        return 1;
-    else
-        return 0;
-}
+    int valid;
+    int hasilBaca;
 
-int jumlahHariBulan(int bulan, int tahun)
-{
-    if (bulan == 2)
-        return tahunKabisat(tahun) ? 29 : 28;
-    else if (bulan == 4 || bulan == 6 || bulan == 9 || bulan == 11)
-        return 30;
-    else
-        return 31;
-}
-
-int tanggalValid(int hari, int bulan, int tahun)
-{
-    if (tahun < 2000 || tahun > 2100) return 0;
-    if (bulan < 1 || bulan > 12)      return 0;
-    if (hari < 1 || hari > jumlahHariBulan(bulan, tahun)) return 0;
-    return 1;
-}
-
-void inputTanggal(const char *judul, int *hari, int *bulan, int *tahun)
-{
-    printf("%s\n", judul);
+    /* Validasi durasi sewa yang disepakati (1-7 hari) */
     do {
-        *hari  = bacaInt("  Tanggal (1-31) : ");
-        *bulan = bacaInt("  Bulan   (1-12) : ");
-        *tahun = bacaInt("  Tahun          : ");
-        if (!tanggalValid(*hari, *bulan, *tahun))
-            printf("  [!] Tanggal tidak valid, ulangi.\n");
-    } while (!tanggalValid(*hari, *bulan, *tahun));
+        printf("Durasi sewa (1-%d hari)  : ", MAKS_DURASI_SEWA);
+        hasilBaca = scanf("%d", &durasiSewa);
+        bersihkanInput();
+
+        if (hasilBaca != 1 || durasiSewa < 1 || durasiSewa > MAKS_DURASI_SEWA) {
+            printf("  [!] Error: Durasi sewa harus antara 1 sampai %d hari.\n", MAKS_DURASI_SEWA);
+            valid = 0;
+        } else {
+            valid = 1;
+        }
+    } while (valid == 0);
+
+    /* Ubah status film menjadi Dipinjam saat disewa */
+    ubahStatusFilm(pilihanFilm, 0);
+
+    /* Input lama peminjaman aktual saat pengembalian */
+    do {
+        printf("Lama peminjaman aktual (hari): ");
+        hasilBaca = scanf("%d", &lamaPinjam);
+        bersihkanInput();
+
+        if (hasilBaca != 1 || lamaPinjam < 1) {
+            printf("  [!] Error: Lama peminjaman minimal 1 hari.\n");
+            valid = 0;
+        } else {
+            valid = 1;
+        }
+    } while (valid == 0);
 }
 
-/* Mengubah tanggal menjadi jumlah hari sejak 1 Jan 2000 (pakai perulangan) */
-long tanggalKeHari(int hari, int bulan, int tahun)
+void hitungSewaDanDenda(void)
 {
-    long total = 0;
-    int th, bl;
+    int hariKe;
 
-    for (th = 2000; th < tahun; th++)
-        total += tahunKabisat(th) ? 366 : 365;
-    for (bl = 1; bl < bulan; bl++)
-        total += jumlahHariBulan(bl, tahun);
-    total += hari;
-    return total;
-}
+    /* 1. Menentukan harga per hari dan menghitung biaya sewa */
+    hargaPerHari = ambilHargaFilm(pilihanFilm);
+    biayaSewa    = hargaPerHari * durasiSewa;
 
-long hitungBiayaSewa(long hargaPerHari, int durasi)
-{
-    return hargaPerHari * durasi;
-}
-
-int hitungLamaPinjam(int hPinjam, int bPinjam, int tPinjam,
-                     int hKembali, int bKembali, int tKembali)
-{
-    int lama = (int)(tanggalKeHari(hKembali, bKembali, tKembali)
-                   - tanggalKeHari(hPinjam, bPinjam, tPinjam));
-    if (lama < 1) lama = 1;    /* dikembalikan di hari yang sama = 1 hari */
-    return lama;
-}
-
-/* Denda dihitung per hari dengan perulangan:
- * hari ke-1 s/d ke-3 : Rp 5.000/hari, hari ke-4 dst : Rp 10.000/hari */
-long hitungDenda(int hariTerlambat)
-{
-    long denda = 0;
-    int i;
-    for (i = 1; i <= hariTerlambat; i++) {
-        if (i <= BATAS_DENDA_NORMAL)
-            denda += DENDA_NORMAL;
-        else
-            denda += DENDA_BERAT;
-    }
-    return denda;
-}
-
-/* Menghitung seluruh komponen transaksi */
-void prosesTransaksi(int noFilm, int durasiSewa,
-                     int hPinjam, int bPinjam, int tPinjam,
-                     int hKembali, int bKembali, int tKembali,
-                     int *lamaPinjam, int *hariTerlambat,
-                     long *biayaSewa, long *denda, long *total,
-                     char *status)
-{
-    *biayaSewa  = hitungBiayaSewa(ambilHarga(noFilm), durasiSewa);
-    *lamaPinjam = hitungLamaPinjam(hPinjam, bPinjam, tPinjam,
-                                   hKembali, bKembali, tKembali);
-
-    if (*lamaPinjam > durasiSewa) {
-        *hariTerlambat = *lamaPinjam - durasiSewa;
-        strcpy(status, "TERLAMBAT");
+    /* 2. Menentukan status pengembalian & jumlah hari terlambat (if-else) */
+    if (lamaPinjam > durasiSewa) {
+        hariTerlambat   = lamaPinjam - durasiSewa;
+        statusTerlambat = 1; /* TERLAMBAT */
     } else {
-        *hariTerlambat = 0;
-        strcpy(status, "TEPAT WAKTU");
+        hariTerlambat   = 0;
+        statusTerlambat = 0; /* TEPAT WAKTU */
     }
 
-    *denda = hitungDenda(*hariTerlambat);
-    *total = *biayaSewa + *denda;
+    /* 3. Menghitung denda keterlambatan dengan perulangan for dan if-else
+     *    Hari ke-1 s/d ke-3 : Rp 5.000 / hari
+     *    Hari ke-4 dst      : Rp 10.000 / hari
+     */
+    denda = 0;
+    for (hariKe = 1; hariKe <= hariTerlambat; hariKe++) {
+        if (hariKe <= BATAS_DENDA_NORMAL) {
+            denda = denda + DENDA_NORMAL;
+        } else {
+            denda = denda + DENDA_BERAT;
+        }
+    }
+
+    /* 4. Menghitung total biaya yang harus dibayar */
+    totalBayar = biayaSewa + denda;
+}
+
+void prosesPembayaran(void)
+{
+    int valid;
+    int hasilBaca;
+
+    printf("Total yang harus dibayar: Rp %ld\n", totalBayar);
+    do {
+        printf("Masukkan jumlah uang bayar: Rp ");
+        hasilBaca = scanf("%ld", &uangBayar);
+        bersihkanInput();
+
+        if (hasilBaca != 1 || uangBayar < totalBayar) {
+            printf("  [!] Error: Uang pembayaran kurang! Minimal Rp %ld.\n", totalBayar);
+            valid = 0;
+        } else {
+            kembalian = uangBayar - totalBayar;
+            valid = 1;
+        }
+    } while (valid == 0);
+
+    /* Setelah pembayaran selesai, film dikembalikan (status = Tersedia) */
+    ubahStatusFilm(pilihanFilm, 1);
 }
 
 /* =================================================================
  *  MAHASISWA 3 - TRANSAKSI & PENGUJIAN
+ *  - Menampilkan bukti rental
+ *  - Menampilkan biaya dan denda
+ *  - Menampilkan status film
+ *  - Menguji peminjaman tepat waktu dan terlambat
+ *  - Mengintegrasikan program
  * ================================================================= */
 
-void tampilkanStatusFilm(void)
+void tampilkanStatusSemuaFilm(void)
 {
     int i;
-    char kode[6], judul[40];
-
-    printf("\n=== STATUS FILM ===\n");
+    printf("\n=== STATUS KETERSEDIAAN FILM ===\n");
     for (i = 1; i <= JUMLAH_FILM; i++) {
-        ambilKode(i, kode);
-        ambilJudul(i, judul);
-        printf("  %-5s %-20s : %s\n", kode, judul,
-               cekTersedia(i) ? "Tersedia" : "Dipinjam");
+        printf("  %d. ", i);
+        cetakNamaFilm(i);
+        printf(" -> %s\n", cekFilmTersedia(i) ? "Tersedia" : "Dipinjam");
     }
 }
 
-void cetakBukti(const char *id, const char *nama, int noFilm,
-                int durasiSewa,
-                int hPinjam, int bPinjam, int tPinjam,
-                int hKembali, int bKembali, int tKembali,
-                int lamaPinjam, int hariTerlambat,
-                long biayaSewa, long dendaVal, long total,
-                const char *status)
+void tampilkanBuktiRental(void)
 {
-    char judul[40], kode[6], genre[15];
-    char harga[20], sBiaya[20], sDenda[20], sTotal[20];
-
-    ambilJudul(noFilm, judul);
-    ambilKode(noFilm, kode);
-    ambilGenre(noFilm, genre);
-    formatRupiah(ambilHarga(noFilm), harga);
-    formatRupiah(biayaSewa, sBiaya);
-    formatRupiah(dendaVal, sDenda);
-    formatRupiah(total, sTotal);
-
     printf("\n");
-    garis('=', 46);
-    printf("            BUKTI RENTAL FILM\n");
-    garis('=', 46);
-    printf("ID Pelanggan    : %s\n", id);
-    printf("Nama Pelanggan  : %s\n", nama);
-    garis('-', 46);
-    printf("Film            : %s (%s)\n", judul, kode);
-    printf("Genre           : %s\n", genre);
-    printf("Harga / Hari    : %s\n", harga);
-    printf("Tanggal Pinjam  : %02d-%02d-%04d\n", hPinjam, bPinjam, tPinjam);
-    printf("Tanggal Kembali : %02d-%02d-%04d\n", hKembali, bKembali, tKembali);
-    printf("Durasi Sewa     : %d hari\n", durasiSewa);
-    printf("Lama Pinjam     : %d hari\n", lamaPinjam);
-    printf("Hari Terlambat  : %d hari\n", hariTerlambat);
-    garis('-', 46);
-    printf("Biaya Sewa      : %15s\n", sBiaya);
-    printf("Denda           : %15s\n", sDenda);
-    garis('-', 46);
-    printf("TOTAL BAYAR     : %15s\n", sTotal);
-    garis('-', 46);
-    printf("Status Kembali  : %s\n", status);
-    printf("Status Film     : %s\n",
-           cekTersedia(noFilm) ? "Tersedia (sudah dikembalikan)" : "Dipinjam");
-    garis('=', 46);
-    printf("     Terima kasih telah menyewa film!\n");
-    garis('=', 46);
+    cetakGaris('=', 48);
+    printf("               BUKTI RENTAL FILM\n");
+    cetakGaris('=', 48);
+    printf("ID Pelanggan      : %s\n", idPelanggan);
+    printf("Nama Pelanggan    : %s\n", namaPelanggan);
+    cetakGaris('-', 48);
+    printf("Film Disewa       : ");
+    cetakNamaFilm(pilihanFilm);
+    printf("\n");
+    printf("Harga Sewa / Hari : Rp %ld\n", hargaPerHari);
+    printf("Durasi Sewa       : %d hari\n", durasiSewa);
+    printf("Lama Peminjaman   : %d hari\n", lamaPinjam);
+    printf("Keterlambatan     : %d hari\n", hariTerlambat);
+    cetakGaris('-', 48);
+    printf("Biaya Sewa        : Rp %ld\n", biayaSewa);
+    printf("Denda Terlambat   : Rp %ld\n", denda);
+    cetakGaris('-', 48);
+    printf("TOTAL BAYAR       : Rp %ld\n", totalBayar);
+    printf("Uang Pembayaran   : Rp %ld\n", uangBayar);
+    printf("Kembalian         : Rp %ld\n", kembalian);
+    cetakGaris('-', 48);
+    printf("Status Kembali    : %s\n",
+           statusTerlambat ? "TERLAMBAT" : "TEPAT WAKTU");
+    printf("Status Film       : %s\n",
+           cekFilmTersedia(pilihanFilm) ? "Tersedia (Sudah Dikembalikan)" : "Sedang Dipinjam");
+    cetakGaris('=', 48);
+    printf("       Terima kasih telah menyewa film!\n");
+    cetakGaris('=', 48);
 }
 
-/* Transaksi lengkap: data pelanggan -> pinjam -> kembali -> bukti */
-void transaksiBaru(void)
+/* Menjalankan 1 transaksi penuh (integrasi Mahasiswa 1, 2, dan 3) */
+void jalankanTransaksi(void)
 {
-    char id[15], nama[50];
-    int noFilm, durasiSewa;
-    int hPinjam, bPinjam, tPinjam;
-    int hKembali, bKembali, tKembali;
-    int lamaPinjam, hariTerlambat;
-    long biayaSewa, denda, total;
-    char status[20];
-    int valid;
-    char judul[40];
+    /* Bagian Mahasiswa 1 */
+    inputDataPelanggan();
+    tampilkanDaftarFilm();
+    inputDanValidasiFilm();
 
-    /* Mahasiswa 1 */
-    inputPelanggan(id, nama);
-    tampilkanFilm();
-    noFilm = pilihFilm();
-    if (noFilm < 0) return;
+    /* Bagian Mahasiswa 2 */
+    inputDurasiDanLamaPinjam();
+    tampilkanStatusSemuaFilm(); /* menampilkan status saat film sedang dipinjam */
+    hitungSewaDanDenda();
+    prosesPembayaran();
 
-    /* Mahasiswa 2 */
-    do {
-        durasiSewa = bacaInt("Durasi sewa (1-7 hari): ");
-        if (durasiSewa < 1 || durasiSewa > MAKS_DURASI_SEWA)
-            printf("  [!] Durasi sewa harus 1-%d hari.\n", MAKS_DURASI_SEWA);
-    } while (durasiSewa < 1 || durasiSewa > MAKS_DURASI_SEWA);
-
-    inputTanggal("\nMasukkan tanggal pinjam:", &hPinjam, &bPinjam, &tPinjam);
-    setTersedia(noFilm, 0);
-    ambilJudul(noFilm, judul);
-    printf("\n>> Film \"%s\" berhasil dipinjam.\n", judul);
-    tampilkanStatusFilm();
-
-    printf("\n=== PENGEMBALIAN FILM ===\n");
-    do {
-        inputTanggal("Masukkan tanggal kembali:", &hKembali, &bKembali, &tKembali);
-        valid = tanggalKeHari(hKembali, bKembali, tKembali)
-              >= tanggalKeHari(hPinjam, bPinjam, tPinjam);
-        if (!valid)
-            printf("  [!] Tanggal kembali tidak boleh sebelum tanggal pinjam.\n");
-    } while (!valid);
-
-    prosesTransaksi(noFilm, durasiSewa,
-                    hPinjam, bPinjam, tPinjam,
-                    hKembali, bKembali, tKembali,
-                    &lamaPinjam, &hariTerlambat,
-                    &biayaSewa, &denda, &total, status);
-    setTersedia(noFilm, 1);     /* film dikembalikan */
-
-    /* Mahasiswa 3 */
-    cetakBukti(id, nama, noFilm, durasiSewa,
-               hPinjam, bPinjam, tPinjam,
-               hKembali, bKembali, tKembali,
-               lamaPinjam, hariTerlambat,
-               biayaSewa, denda, total, status);
-    tampilkanStatusFilm();
+    /* Bagian Mahasiswa 3 */
+    tampilkanBuktiRental();
+    tampilkanStatusSemuaFilm(); /* menampilkan status setelah film dikembalikan */
 }
 
-/* Pengujian otomatis: kasus tepat waktu & terlambat */
-int ujiKasus(const char *namaKasus,
-             const char *id, const char *nama, int noFilm, int durasiSewa,
-             int hPinjam, int bPinjam, int tPinjam,
-             int hKembali, int bKembali, int tKembali,
-             int expLama, int expTerlambat,
-             long expBiaya, long expDenda, long expTotal,
-             const char *expStatus)
+/* Fungsi pengujian otomatis: Tepat Waktu & Terlambat */
+void pengujianOtomatis(void)
 {
-    int lamaPinjam, hariTerlambat, lulus;
-    long biayaSewa, denda, total;
-    char status[20];
+    printf("\n");
+    cetakGaris('=', 52);
+    printf("   PENGUJIAN OTOMATIS (TEPAT WAKTU & TERLAMBAT)\n");
+    cetakGaris('=', 52);
 
-    prosesTransaksi(noFilm, durasiSewa,
-                    hPinjam, bPinjam, tPinjam,
-                    hKembali, bKembali, tKembali,
-                    &lamaPinjam, &hariTerlambat,
-                    &biayaSewa, &denda, &total, status);
+    /* --- KASUS UJI 1: Peminjaman Tepat Waktu --- */
+    printf("\n[KASUS UJI 1] Peminjaman Tepat Waktu\n");
+    snprintf(idPelanggan, sizeof(idPelanggan), "P001");
+    snprintf(namaPelanggan, sizeof(namaPelanggan), "Budi Santoso");
+    pilihanFilm = 1; /* Avengers: Endgame - Rp 8000/hari */
+    durasiSewa  = 3;
+    lamaPinjam  = 3; /* Dikembalikan tepat 3 hari */
 
-    printf("\n>>> %s\n", namaKasus);
-    cetakBukti(id, nama, noFilm, durasiSewa,
-               hPinjam, bPinjam, tPinjam,
-               hKembali, bKembali, tKembali,
-               lamaPinjam, hariTerlambat,
-               biayaSewa, denda, total, status);
+    ubahStatusFilm(pilihanFilm, 0);
+    hitungSewaDanDenda();
+    uangBayar = 30000;
+    kembalian = uangBayar - totalBayar;
+    ubahStatusFilm(pilihanFilm, 1);
+    tampilkanBuktiRental();
 
-    lulus = lamaPinjam == expLama && hariTerlambat == expTerlambat &&
-            biayaSewa == expBiaya && denda == expDenda &&
-            total == expTotal && strcmp(status, expStatus) == 0;
+    if (biayaSewa == 24000 && denda == 0 && totalBayar == 24000 && statusTerlambat == 0) {
+        printf(">> HASIL UJI 1 (TEPAT WAKTU): BERHASIL / LULUS\n");
+    } else {
+        printf(">> HASIL UJI 1 (TEPAT WAKTU): GAGAL\n");
+    }
 
-    printf("Diharapkan : lama=%d, telat=%d, biaya=%ld, denda=%ld, total=%ld, %s\n",
-           expLama, expTerlambat, expBiaya, expDenda, expTotal, expStatus);
-    printf("Hasil      : lama=%d, telat=%d, biaya=%ld, denda=%ld, total=%ld, %s\n",
-           lamaPinjam, hariTerlambat, biayaSewa, denda, total, status);
-    printf("Kesimpulan : %s\n", lulus ? "LULUS" : "GAGAL");
-    return lulus;
-}
+    /* --- KASUS UJI 2: Peminjaman Terlambat --- */
+    printf("\n[KASUS UJI 2] Peminjaman Terlambat\n");
+    snprintf(idPelanggan, sizeof(idPelanggan), "P002");
+    snprintf(namaPelanggan, sizeof(namaPelanggan), "Siti Aminah");
+    pilihanFilm = 5; /* Interstellar - Rp 9000/hari */
+    durasiSewa  = 2;
+    lamaPinjam  = 7; /* Terlambat 5 hari: 3x5000 + 2x10000 = 35000 */
 
-void pengujian(void)
-{
-    int lulus = 0;
+    ubahStatusFilm(pilihanFilm, 0);
+    hitungSewaDanDenda();
+    uangBayar = 60000;
+    kembalian = uangBayar - totalBayar;
+    ubahStatusFilm(pilihanFilm, 1);
+    tampilkanBuktiRental();
 
-    printf("\n========== MODE PENGUJIAN ==========\n");
-
-    /* Kasus 1: Tepat waktu.
-     * Sewa 3 hari, pinjam 01-10-2026, kembali 04-10-2026 */
-    lulus += ujiKasus("KASUS 1 - PENGEMBALIAN TEPAT WAKTU",
-                      "P001", "Budi Santoso", 1, 3,
-                      1, 10, 2026,
-                      4, 10, 2026,
-                      3, 0, 24000, 0, 24000, "TEPAT WAKTU");
-
-    /* Kasus 2: Terlambat.
-     * Sewa 2 hari, pinjam 28-09-2026, kembali 05-10-2026
-     * Lama 7 hari -> telat 5 hari -> denda 3x5.000 + 2x10.000 = 35.000 */
-    lulus += ujiKasus("KASUS 2 - PENGEMBALIAN TERLAMBAT",
-                      "P002", "Siti Aminah", 5, 2,
-                      28, 9, 2026,
-                      5, 10, 2026,
-                      7, 5, 18000, 35000, 53000, "TERLAMBAT");
-
-    printf("\n========== HASIL PENGUJIAN: %d/2 LULUS ==========\n", lulus);
+    if (biayaSewa == 18000 && denda == 35000 && totalBayar == 53000 && statusTerlambat == 1) {
+        printf(">> HASIL UJI 2 (TERLAMBAT)  : BERHASIL / LULUS\n");
+    } else {
+        printf(">> HASIL UJI 2 (TERLAMBAT)  : GAGAL\n");
+    }
 }
 
 /* =================================================================
- *  PROGRAM UTAMA (INTEGRASI)
+ *  PROGRAM UTAMA (INTEGRASI MENU)
  * ================================================================= */
 int main(void)
 {
     int menu;
+    int hasilBaca;
+    char ulangTransaksi;
 
     do {
         printf("\n");
-        garis('=', 40);
-        printf("       SISTEM RENTAL FILM - KELOMPOK 3\n");
-        garis('=', 40);
-        printf("1. Transaksi Rental Baru\n");
+        cetakGaris('=', 44);
+        printf("      SISTEM RENTAL FILM - KELOMPOK 3\n");
+        cetakGaris('=', 44);
+        printf("1. Transaksi Rental Film Baru\n");
         printf("2. Lihat Daftar & Status Film\n");
         printf("3. Pengujian (Tepat Waktu & Terlambat)\n");
         printf("0. Keluar\n");
-        garis('-', 40);
-        menu = bacaInt("Pilih menu: ");
+        cetakGaris('-', 44);
+        printf("Pilih menu (0-3): ");
 
-        if (menu == 1)
-            transaksiBaru();
-        else if (menu == 2)
-            tampilkanFilm();
-        else if (menu == 3)
-            pengujian();
-        else if (menu == 0)
-            printf("Terima kasih. Program selesai.\n");
-        else
-            printf("  [!] Menu tidak tersedia.\n");
+        hasilBaca = scanf("%d", &menu);
+        bersihkanInput();
+
+        if (hasilBaca != 1) {
+            printf("  [!] Error: Masukkan angka menu 0-3!\n");
+            menu = -1;
+        } else if (menu == 1) {
+            do {
+                jalankanTransaksi();
+                printf("\nIngin melakukan transaksi lagi? (y/t): ");
+                scanf(" %c", &ulangTransaksi);
+                bersihkanInput();
+            } while (ulangTransaksi == 'y' || ulangTransaksi == 'Y');
+        } else if (menu == 2) {
+            tampilkanDaftarFilm();
+        } else if (menu == 3) {
+            pengujianOtomatis();
+        } else if (menu == 0) {
+            printf("\nTerima kasih telah menggunakan Sistem Rental Film!\n");
+        } else {
+            printf("  [!] Error: Pilihan menu tidak tersedia!\n");
+        }
     } while (menu != 0);
 
     return 0;
