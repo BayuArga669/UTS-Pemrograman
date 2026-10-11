@@ -2,7 +2,7 @@
 """
 Generator PowerPoint (.pptx) Murni menggunakan Python Standard Library (zipfile + XML).
 Menghasilkan file Presentasi_Rental_Film_Kelompok_3.pptx (16:9 Widescreen)
-sesuai dengan Format Laporan Mini Project Pemrograman Dasar & Tugas Kelompok 3.
+yang disesuaikan 100% dengan kode rental_film.c milik Kelompok 3.
 """
 
 import zipfile
@@ -10,7 +10,7 @@ from xml.sax.saxutils import escape
 
 OUTPUT_FILE = "Presentasi_Rental_Film_Kelompok_3.pptx"
 
-# Ukuran slide 16:9 dalam EMU (1 inch = 914400 EMU -> 13.333 x 7.5 inch)
+# Ukuran slide 16:9 dalam EMU (13.333 x 7.5 inch)
 SLIDE_W = 12192000
 SLIDE_H = 6858000
 
@@ -57,11 +57,6 @@ class SlideBuilder:
 
     def add_textbox(self, x, y, w, h, paragraphs, fill_hex=None, line_hex=None,
                     roundness=None, anchor="t", pad=(91440, 68580, 91440, 68580)):
-        """
-        paragraphs: list of dicts or tuples:
-          dict keys: text, size (pt), bold (bool), color (hex), align ('l','ctr','r'),
-                     bullet (bool), font ('Calibri' or 'Consolas'), space_after (pt)
-        """
         sid = self._id()
         geom = "roundRect" if roundness is not None else "rect"
         av = f'<a:avLst><a:gd name="adj" fmla="val {roundness}"/></a:avLst>' if roundness is not None else "<a:avLst/>"
@@ -126,28 +121,23 @@ class SlideBuilder:
         </p:sp>""")
 
     def add_header(self, bab_label, title, subtitle, slide_no):
-        # Top navy header bar
         self.add_rect(0, 0, SLIDE_W, emu_in(1.15), "0F172A")
         self.add_rect(0, emu_in(1.15), SLIDE_W, emu_in(0.06), "38BDF8")
-        # Bab badge
         self.add_textbox(
             emu_in(0.55), emu_in(0.18), emu_in(2.4), emu_in(0.32),
             [{"text": bab_label, "size": 11, "bold": True, "color": "0F172A", "align": "ctr"}],
             fill_hex="38BDF8", roundness=25000, anchor="ctr", pad=(30000, 10000, 30000, 10000)
         )
-        # Main slide title
         self.add_textbox(
             emu_in(0.55), emu_in(0.52), emu_in(10.5), emu_in(0.55),
             [{"text": title, "size": 22, "bold": True, "color": "FFFFFF"}],
             pad=(0, 0, 0, 0)
         )
-        # Subtitle on right
         self.add_textbox(
-            emu_in(8.5), emu_in(0.18), emu_in(4.25), emu_in(0.35),
+            emu_in(8.2), emu_in(0.18), emu_in(4.55), emu_in(0.35),
             [{"text": subtitle, "size": 11, "color": "94A3B8", "align": "r"}],
             pad=(0, 0, 0, 0)
         )
-        # Footer bar
         self.add_rect(0, emu_in(7.15), SLIDE_W, emu_in(0.35), "E2E8F0")
         self.add_textbox(
             emu_in(0.55), emu_in(7.17), emu_in(8.0), emu_in(0.3),
@@ -161,16 +151,13 @@ class SlideBuilder:
         )
 
     def add_card(self, x, y, w, h, title, items, accent_hex="0284C7", bg_hex="FFFFFF", font="Calibri", font_size=13):
-        # Card background
         self.add_rect(x, y, w, h, bg_hex, line_hex="CBD5E1", roundness=4000)
-        # Top accent stripe
         self.add_rect(x, y, w, emu_in(0.42), accent_hex, roundness=4000)
         self.add_textbox(
             x + emu_in(0.18), y + emu_in(0.05), w - emu_in(0.36), emu_in(0.34),
             [{"text": title, "size": 13, "bold": True, "color": "FFFFFF"}],
             pad=(0, 0, 0, 0), anchor="ctr"
         )
-        # Body text
         paras = []
         for it in items:
             if isinstance(it, dict):
@@ -233,28 +220,26 @@ def build_slides():
         emu_in(1.0), emu_in(1.35), emu_in(11.2), emu_in(1.4),
         [
             {"text": "SISTEM RENTAL FILM", "size": 40, "bold": True, "color": "FFFFFF", "space_after": 6},
-            {"text": "Implementasi Bahasa C Menggunakan Struktur Kontrol Dasar (Tanpa Array, Struct, & Pointer)", "size": 16, "color": "94A3B8"}
+            {"text": "Implementasi Bahasa C Menggunakan do-while, switch-case, dan if-else (Tanpa Array Data, Struct, & Pointer)", "size": 15, "color": "94A3B8"}
         ],
         pad=(0, 0, 0, 0)
     )
 
-    # Box Kelompok & Anggota
     s1.add_rect(emu_in(1.0), emu_in(2.9), emu_in(6.8), emu_in(3.6), "1E293B", line_hex="334155", roundness=4000)
     s1.add_textbox(
         emu_in(1.25), emu_in(3.1), emu_in(6.3), emu_in(3.3),
         [
             {"text": "KELOMPOK 3 — PEMBAGIAN ANGGOTA", "size": 15, "bold": True, "color": "38BDF8", "space_after": 10},
             {"text": "1. Mahasiswa 1 (NRP: ....................) — Data Pelanggan & Film", "size": 13, "bold": True, "color": "FFFFFF", "space_after": 2},
-            {"text": "    Input ID & nama pelanggan, daftar film, validasi pilihan film (do-while)", "size": 11, "color": "CBD5E1", "space_after": 8},
+            {"text": "    Input ID & nama pelanggan, daftar 5 film, validasi pilihan film (do-while & switch)", "size": 11, "color": "CBD5E1", "space_after": 8},
             {"text": "2. Mahasiswa 2 (NRP: ....................) — Proses Sewa & Denda", "size": 13, "bold": True, "color": "FFFFFF", "space_after": 2},
-            {"text": "    Biaya sewa, lama pinjam, denda keterlambatan & status (if-else & for)", "size": 11, "color": "CBD5E1", "space_after": 8},
+            {"text": "    Input lama pinjam, opsi perpanjangan (y/n), hitung biaya sewa, denda & status (if-else)", "size": 11, "color": "CBD5E1", "space_after": 8},
             {"text": "3. Mahasiswa 3 (NRP: ....................) — Transaksi & Pengujian", "size": 13, "bold": True, "color": "FFFFFF", "space_after": 2},
-            {"text": "    Bukti rental, status film, uji tepat waktu & terlambat, integrasi program", "size": 11, "color": "CBD5E1", "space_after": 4},
+            {"text": "    Menampilkan bukti rental, biaya, denda, total bayar, status, & pengujian program", "size": 11, "color": "CBD5E1", "space_after": 4},
         ],
         pad=(0, 0, 0, 0)
     )
 
-    # Box Identitas Mata Kuliah
     s1.add_rect(emu_in(8.1), emu_in(2.9), emu_in(4.5), emu_in(3.6), "1E293B", line_hex="38BDF8", roundness=4000)
     s1.add_textbox(
         emu_in(8.35), emu_in(3.1), emu_in(4.0), emu_in(3.3),
@@ -282,9 +267,9 @@ def build_slides():
         emu_in(0.55), emu_in(1.45), emu_in(5.9), emu_in(5.4),
         "1.1 Latar Belakang Permasalahan",
         [
-            "Proses penyewaan (rental) film secara manual membutuhkan pencatatan identitas pelanggan, pengecekan ketersediaan judul film, serta perhitungan biaya dan denda yang rentan mengalami kesalahan hitung.",
-            "Sering terjadi kekeliruan saat menentukan apakah pengembalian film berstatus TEPAT WAKTU atau TERLAMBAT beserta akumulasi denda hariannya.",
-            "Oleh karena itu, dibangun program Sistem Rental Film berbasis bahasa C yang terstruktur untuk mengotomatisasi proses pencatatan, validasi input, perhitungan biaya sewa dan denda, hingga pencetakan bukti transaksi."
+            "Proses penyewaan film secara manual membutuhkan pencatatan data pelanggan, pemilihan film yang tersedia, serta perhitungan biaya sewa dan denda keterlambatan secara terstruktur.",
+            "Selain itu, pelanggan terkadang membutuhkan perpanjangan masa sewa sebelum mengembalikan film.",
+            "Oleh karena itu, dibuat program sederhana menggunakan bahasa C untuk membantu proses transaksi rental film mulai dari validasi ketersediaan film hingga pencetakan bukti rental."
         ],
         accent_hex="0284C7", font_size=13
     )
@@ -293,10 +278,10 @@ def build_slides():
         emu_in(6.75), emu_in(1.45), emu_in(5.9), emu_in(5.4),
         "1.2 Rumusan Masalah",
         [
-            "1. Bagaimana merancang dan membangun program Sistem Rental Film menggunakan bahasa C?",
-            "2. Bagaimana melakukan input data pelanggan serta validasi pilihan film menggunakan perulangan do-while?",
-            "3. Bagaimana menentukan biaya sewa, menghitung lama peminjaman, menghitung denda keterlambatan, dan menentukan status pengembalian menggunakan if-else dan perulangan?",
-            "4. Bagaimana menampilkan bukti rental, memperbarui status film, serta menguji skenario peminjaman tepat waktu dan terlambat?"
+            "1. Bagaimana membuat program Sistem Rental Film menggunakan bahasa C?",
+            "2. Bagaimana melakukan input data pelanggan serta validasi pilihan dan ketersediaan stok film menggunakan do-while?",
+            "3. Bagaimana menentukan biaya sewa, perpanjangan lama peminjaman, denda keterlambatan (Rp2.000/hari), dan status pengembalian menggunakan if-else?",
+            "4. Bagaimana menampilkan bukti rental lengkap serta menguji skenario peminjaman tepat waktu dan terlambat?"
         ],
         accent_hex="0F172A", font_size=13
     )
@@ -312,11 +297,11 @@ def build_slides():
         emu_in(0.55), emu_in(1.45), emu_in(5.9), emu_in(5.4),
         "1.3 Tujuan Pembuatan Program",
         [
-            "1. Membuat program Sistem Rental Film yang fungsional menggunakan bahasa pemrograman C.",
-            "2. Menerapkan struktur percabangan if dan if-else untuk penentuan tarif film, status pengembalian, dan denda.",
-            "3. Menerapkan struktur perulangan while, do-while, dan for sesuai fungsinya masing-masing.",
-            "4. Menerapkan validasi input agar program tahan terhadap masukan yang tidak valid.",
-            "5. Mengembangkan kemampuan pembagian tugas dan integrasi kode dalam kerja kelompok."
+            "1. Membuat program Sistem Rental Film menggunakan bahasa C.",
+            "2. Menerapkan struktur percabangan if, if-else, dan switch-case.",
+            "3. Menerapkan struktur perulangan do-while untuk validasi input pilihan film.",
+            "4. Menghitung biaya sewa, perpanjangan durasi, dan denda keterlambatan secara tepat.",
+            "5. Mengembangkan kemampuan bekerja sama dan integrasi kode dalam kelompok."
         ],
         accent_hex="059669", font_size=13
     )
@@ -325,12 +310,12 @@ def build_slides():
         emu_in(6.75), emu_in(1.45), emu_in(5.9), emu_in(5.4),
         "1.4 Batasan Masalah",
         [
-            "Program dibuat menggunakan bahasa pemrograman C (Standard Library stdio.h).",
-            "Program TIDAK menggunakan array data untuk menyimpan daftar film maupun transaksi.",
-            "Program TIDAK menggunakan struct ataupun konsep Object-Oriented Programming (OOP).",
-            "Program TIDAK menggunakan pointer (*).",
-            "Struktur kontrol yang digunakan dibatasi pada: if, if-else, while, do-while, dan for.",
-            "Data ketersediaan film dan transaksi hanya disimpan selama program berjalan (in-memory)."
+            "Program dibuat menggunakan bahasa C (<stdio.h> dan <string.h>).",
+            "Program TIDAK menggunakan array untuk menyimpan daftar film (menggunakan #define konstanta).",
+            "Program TIDAK menggunakan struct maupun konsep OOP.",
+            "Program TIDAK menggunakan pointer.",
+            "Struktur kontrol yang digunakan adalah do-while, switch-case, if, dan if-else.",
+            "Denda keterlambatan ditetapkan sebesar Rp2.000 per hari keterlambatan."
         ],
         accent_hex="DC2626", font_size=13
     )
@@ -346,22 +331,21 @@ def build_slides():
         emu_in(0.55), emu_in(1.42), emu_in(12.1), emu_in(1.65),
         "2.1 Deskripsi Singkat Sistem",
         [
-            "Program dimulai dengan menampilkan menu utama, lalu menerima input ID dan Nama Pelanggan. Selanjutnya program menampilkan 5 pilihan film beserta harga sewa per hari dan statusnya (Tersedia/Dipinjam), lalu memvalidasi pilihan pelanggan menggunakan do-while. Pelanggan memasukkan durasi sewa (1-7 hari) dan lama peminjaman aktual. Program menghitung biaya sewa, menentukan status pengembalian (TEPAT WAKTU / TERLAMBAT) dengan if-else, menghitung denda keterlambatan bertingkat dengan perulangan for, memvalidasi uang pembayaran, dan mencetak Bukti Rental Film."
+            "Program dimulai dengan menerima input ID dan nama pelanggan, lalu menampilkan daftar 5 film beserta biaya/hari dan status ketersediaannya (Tersedia/Dipinjam). Pelanggan memilih nomor film (1-5) dan program memvalidasi pilihan menggunakan do-while & switch-case (jika stok = 0 seperti Interstellar, pelanggan diminta memilih ulang). Selanjutnya pelanggan memasukkan lama peminjaman, opsi perpanjangan (y/n), dan hari pengembalian. Program menghitung biaya sewa, mengecek keterlambatan (if-else) dengan denda Rp2.000/hari, lalu mencetak Bukti Rental."
         ],
         accent_hex="0F172A", font_size=12
     )
 
-    # Tiga kolom Tabel IPO (2.2)
     s4.add_card(
         emu_in(0.55), emu_in(3.25), emu_in(3.85), emu_in(3.65),
         "INPUT (Masukan)",
         [
-            "ID Pelanggan",
-            "Nama Pelanggan",
-            "Pilihan Nomor Film (1-5)",
-            "Durasi Sewa (1-7 hari)",
-            "Lama Peminjaman Aktual (hari)",
-            "Jumlah Uang Pembayaran (Rp)"
+            "ID Pelanggan (id)",
+            "Nama Pelanggan (nama)",
+            "Pilihan Nomor Film 1-5 (pilih)",
+            "Lama Peminjaman Awal (lama)",
+            "Opsi Perpanjang y/n (jawab & tambah)",
+            "Hari Pengembalian Film (hariKembali)"
         ],
         accent_hex="0284C7", font_size=12
     )
@@ -369,12 +353,12 @@ def build_slides():
         emu_in(4.68), emu_in(3.25), emu_in(3.85), emu_in(3.65),
         "PROSES (Pengolahan)",
         [
-            "Validasi pilihan film & ketersediaan (do-while)",
-            "Menentukan harga sewa film (if-else)",
-            "Menghitung biaya sewa = harga x durasi",
-            "Menentukan status kembali & hari telat (if-else)",
-            "Menghitung denda bertingkat per hari (for)",
-            "Menghitung total bayar & kembalian"
+            "Validasi nomor film & cek STOK (do-while & switch)",
+            "Menentukan judul & harga film terpilih",
+            "Menambah lama pinjam jika diperpanjang (if)",
+            "Menghitung biaya = harga * lama",
+            "Cek hariKembali > lama (if-else)",
+            "Hitung denda = (hariKembali - lama) * 2000"
         ],
         accent_hex="7C3AED", font_size=12
     )
@@ -382,12 +366,12 @@ def build_slides():
         emu_in(8.80), emu_in(3.25), emu_in(3.85), emu_in(3.65),
         "OUTPUT (Keluaran)",
         [
-            "Tabel Daftar & Status Ketersediaan Film",
-            "Bukti Rental Film (ID, Nama, Judul Film)",
-            "Rincian Biaya Sewa & Denda Keterlambatan",
-            "Total Pembayaran & Uang Kembalian",
-            "Status Pengembalian (TEPAT WAKTU / TERLAMBAT)",
-            "Status Film Terbaru (Dipinjam / Tersedia)"
+            "Tabel Daftar Film (No, Nama, Biaya/Hari, Status)",
+            "Konfirmasi Film Terpilih & Harga/Hari",
+            "Bukti Rental: ID / Nama Pelanggan, Judul Film",
+            "Lama Pinjam & Hari Dikembalikan",
+            "Biaya Sewa, Denda, & Total Bayar (biaya + denda)",
+            "Status Pengembalian (Tepat waktu / Terlambat)"
         ],
         accent_hex="059669", font_size=12
     )
@@ -401,41 +385,43 @@ def build_slides():
 
     s5.add_card(
         emu_in(0.55), emu_in(1.42), emu_in(5.9), emu_in(5.45),
-        "Algoritma Bagian 1: Input & Validasi (Mahasiswa 1 & 2)",
+        "Algoritma Bagian 1: Data Pelanggan & Validasi Film",
         [
             {"text": "Mulai", "size": 11, "bold": True, "font": "Consolas", "color": "0284C7"},
-            {"text": "  Ulangi (do-while transaksi):", "size": 11, "font": "Consolas"},
-            {"text": "    Input idPelanggan dan namaPelanggan", "size": 11, "font": "Consolas"},
-            {"text": "    Tampilkan daftar 5 film beserta harga & status", "size": 11, "font": "Consolas"},
-            {"text": "    Ulangi (do-while validasi film):", "size": 11, "font": "Consolas"},
-            {"text": "      Input pilihanFilm (1..5)", "size": 11, "font": "Consolas"},
-            {"text": "      Jika pilihanFilm < 1 atau > 5 atau status == Dipinjam:", "size": 11, "font": "Consolas"},
-            {"text": "        Tampilkan pesan kesalahan", "size": 11, "font": "Consolas"},
-            {"text": "    Selama pilihanFilm tidak valid", "size": 11, "font": "Consolas"},
-            {"text": "    Input durasiSewa (validasi 1..7 hari dengan do-while)", "size": 11, "font": "Consolas"},
-            {"text": "    Ubah status film terpilih menjadi Dipinjam (0)", "size": 11, "font": "Consolas"},
-            {"text": "    Input lamaPinjam aktual (minimal 1 hari)", "size": 11, "font": "Consolas"},
+            {"text": "  Input id pelanggan dan nama pelanggan", "size": 11, "font": "Consolas"},
+            {"text": "  Tampilkan tabel 5 film (JUDUL1..5, HARGA1..5, STOK1..5)", "size": 11, "font": "Consolas"},
+            {"text": "  Ulangi (do-while !valid):", "size": 11, "font": "Consolas"},
+            {"text": "    valid = 0", "size": 11, "font": "Consolas"},
+            {"text": "    Input pilih (nomor film 1-5)", "size": 11, "font": "Consolas"},
+            {"text": "    Pilih kasus (switch pilih):", "size": 11, "font": "Consolas"},
+            {"text": "      Kasus 1..5:", "size": 11, "font": "Consolas"},
+            {"text": "        Jika STOK tersedia Maka:", "size": 11, "font": "Consolas"},
+            {"text": "          Salin judul film & simpan harga; valid = 1", "size": 11, "font": "Consolas"},
+            {"text": "        Jika tidak:", "size": 11, "font": "Consolas"},
+            {"text": "          Tampilkan 'Film sedang dipinjam, pilih yang lain!'", "size": 11, "font": "Consolas"},
+            {"text": "      Default: Tampilkan 'Nomor tidak valid, ulangi!'", "size": 11, "font": "Consolas"},
+            {"text": "  Selama valid == 0", "size": 11, "font": "Consolas"},
         ],
         accent_hex="0F172A", bg_hex="F1F5F9"
     )
 
     s5.add_card(
         emu_in(6.75), emu_in(1.42), emu_in(5.9), emu_in(5.45),
-        "Algoritma Bagian 2: Perhitungan & Output (Mahasiswa 2 & 3)",
+        "Algoritma Bagian 2: Proses Sewa, Denda, & Bukti Rental",
         [
-            {"text": "    Tentukan hargaPerHari berdasarkan pilihanFilm (if-else)", "size": 11, "font": "Consolas"},
-            {"text": "    biayaSewa = hargaPerHari * durasiSewa", "size": 11, "font": "Consolas"},
-            {"text": "    Jika lamaPinjam > durasiSewa Maka:", "size": 11, "font": "Consolas"},
-            {"text": "      hariTerlambat = lamaPinjam - durasiSewa", "size": 11, "font": "Consolas"},
-            {"text": "      status = TERLAMBAT", "size": 11, "font": "Consolas"},
-            {"text": "      Untuk hariKe = 1 sampai hariTerlambat (for):", "size": 11, "font": "Consolas"},
-            {"text": "        Jika hariKe <= 3: denda += 5000", "size": 11, "font": "Consolas"},
-            {"text": "        Selain itu      : denda += 10000", "size": 11, "font": "Consolas"},
-            {"text": "    Selain itu: hariTerlambat = 0, denda = 0, status = TEPAT WAKTU", "size": 11, "font": "Consolas"},
-            {"text": "    totalBayar = biayaSewa + denda", "size": 11, "font": "Consolas"},
-            {"text": "    Input uangBayar (do-while uangBayar >= totalBayar)", "size": 11, "font": "Consolas"},
-            {"text": "    kembalian = uangBayar - totalBayar; Status Film = Tersedia", "size": 11, "font": "Consolas"},
-            {"text": "    Tampilkan Bukti Rental & Status Film; Tanya transaksi lagi", "size": 11, "font": "Consolas"},
+            {"text": "  Tampilkan judul film dan harga terpilih", "size": 11, "font": "Consolas"},
+            {"text": "  Input lama peminjaman (hari)", "size": 11, "font": "Consolas"},
+            {"text": "  Input jawab ('Perpanjang peminjaman? y/n')", "size": 11, "font": "Consolas"},
+            {"text": "  Jika jawab == 'y' atau 'Y' Maka:", "size": 11, "font": "Consolas"},
+            {"text": "    Input tambah hari; lama = lama + tambah", "size": 11, "font": "Consolas"},
+            {"text": "  Input hariKembali ('Film dikembalikan pada hari ke-')", "size": 11, "font": "Consolas"},
+            {"text": "  biaya = harga * lama", "size": 11, "font": "Consolas"},
+            {"text": "  Jika hariKembali > lama Maka:", "size": 11, "font": "Consolas"},
+            {"text": "    denda = (hariKembali - lama) * 2000", "size": 11, "font": "Consolas"},
+            {"text": "    status = 'Terlambat'", "size": 11, "font": "Consolas"},
+            {"text": "  Selain itu:", "size": 11, "font": "Consolas"},
+            {"text": "    denda = 0; status = 'Tepat waktu'", "size": 11, "font": "Consolas"},
+            {"text": "  Tampilkan Bukti Rental (biaya, denda, total, status)", "size": 11, "font": "Consolas"},
             {"text": "Selesai", "size": 11, "bold": True, "font": "Consolas", "color": "0284C7"},
         ],
         accent_hex="0284C7", bg_hex="F1F5F9"
@@ -446,20 +432,19 @@ def build_slides():
     # SLIDE 6: BAB II — FLOWCHART PROGRAM (2.4)
     # =========================================================================
     s6 = SlideBuilder()
-    s6.add_header("BAB II", "ANALISIS & PERANCANGAN: FLOWCHART PROGRAM", "2.4 Alur Eksekusi: Mulai -> Input -> Validasi -> Proses -> Perhitungan -> Output -> Pengulangan -> Selesai", 6)
+    s6.add_header("BAB II", "ANALISIS & PERANCANGAN: FLOWCHART PROGRAM", "2.4 Alur: Mulai -> Input -> Validasi (do-while) -> Perpanjangan -> Perhitungan -> Output -> Selesai", 6)
 
     flow_steps = [
-        ("1. MULAI", "Tampilkan Menu Utama\n(1. Transaksi, 2. Daftar Film,\n3. Pengujian, 0. Keluar)", "0F172A"),
-        ("2. INPUT DATA", "Masukkan ID Pelanggan &\nNama Pelanggan;\nTampilkan 5 Pilihan Film", "0284C7"),
-        ("3. VALIDASI (do-while)", "Input Pilihan Film (1-5)\n& Durasi Sewa (1-7 hari).\nValid & Tersedia?", "D97706"),
-        ("4. PROSES PINJAM", "Set Status Film = Dipinjam;\nInput Lama Peminjaman\nAktual (hari)", "7C3AED"),
-        ("5. PERHITUNGAN", "Hitung Biaya Sewa;\nCek Lama > Durasi (if-else);\nHitung Denda Bertingkat (for)", "DC2626"),
-        ("6. PEMBAYARAN", "Hitung Total = Biaya + Denda;\nValidasi Uang Bayar >= Total;\nHitung Kembalian", "059669"),
-        ("7. OUTPUT BUKTI", "Cetak Bukti Rental Lengkap;\nKembalikan Status Film\nmenjadi Tersedia", "0284C7"),
-        ("8. PENGULANGAN / SELESAI", "Transaksi Lagi? (y/t)\nJika 'y' kembali ke Input;\nJika 't' -> SELESAI", "0F172A"),
+        ("1. MULAI & INPUT", "Input ID (id) &\nNama Pelanggan (nama);\nTampilkan Daftar 5 Film", "0F172A"),
+        ("2. PILIH FILM", "Masukkan Nomor Film\n(pilih 1-5) di dalam\nperulangan do-while", "0284C7"),
+        ("3. VALIDASI STOK", "Cek switch(pilih) & STOK:\nJika valid & tersedia -> Lanjut\nJika tidak -> Ulangi input", "D97706"),
+        ("4. LAMA PINJAM", "Input lama peminjaman;\nTanya Perpanjang? (y/n)\nJika 'y': lama += tambah", "7C3AED"),
+        ("5. HARI KEMBALI", "Input hariKembali;\nHitung biaya = harga * lama", "0284C7"),
+        ("6. CEK TERLAMBAT", "Apakah hariKembali > lama?\nYa: denda=(hariKembali-lama)*2000\nTidak: denda = 0", "DC2626"),
+        ("7. STATUS KEMBALI", "Ya -> status = 'Terlambat'\nTidak -> status = 'Tepat waktu'\nHitung Total = biaya + denda", "059669"),
+        ("8. BUKTI & SELESAI", "Cetak BUKTI RENTAL\nlengkap ke layar\n-> SELESAI", "0F172A"),
     ]
 
-    # Baris 1 (Langkah 1 - 4)
     for idx in range(4):
         title, desc, color = flow_steps[idx]
         x = emu_in(0.55 + idx * 3.1)
@@ -472,12 +457,10 @@ def build_slides():
                            [{"text": "➔", "size": 20, "bold": True, "color": "0284C7", "align": "ctr"}],
                            pad=(0, 0, 0, 0))
 
-    # Panah turun dari langkah 4 ke langkah 5
     s6.add_textbox(emu_in(10.7), emu_in(3.8), emu_in(1.2), emu_in(0.45),
                    [{"text": "⬇ Lanjut", "size": 13, "bold": True, "color": "0284C7", "align": "ctr"}],
                    pad=(0, 0, 0, 0))
 
-    # Baris 2 (Langkah 5 - 8)
     for idx in range(4, 8):
         title, desc, color = flow_steps[idx]
         col = idx - 4
@@ -502,27 +485,25 @@ def build_slides():
         emu_in(0.55), emu_in(1.45), emu_in(5.4), emu_in(5.4),
         "3.1 Lingkungan Pengembangan",
         [
-            "Bahasa Pemrograman : Bahasa C (Standard C99 / C11)",
-            "Compiler           : GCC (MinGW-w64) via Terminal",
-            "Perintah Kompilasi : gcc -Wall -Wextra -o rental_film.exe rental_film.c",
+            "Bahasa Pemrograman : Bahasa C",
+            "Compiler / IDE     : GCC (MinGW) / Visual Studio Code",
             "Sistem Operasi     : Microsoft Windows 10 / 11",
-            "Text Editor / IDE  : Visual Studio Code",
-            "pustaka (Header)   : #include <stdio.h>"
+            "Header Library     : <stdio.h> dan <string.h>",
+            "Konstanta Makro    : #define JUDUL1..5, HARGA1..5, STOK1..5, DENDA_PER_HARI 2000"
         ],
         accent_hex="0F172A", font_size=13
     )
 
     s7.add_card(
         emu_in(6.25), emu_in(1.45), emu_in(6.4), emu_in(5.4),
-        "3.2 Bagian-Bagian Utama Struktur Program",
+        "3.2 Struktur Bagian Utama Program",
         [
-            "1. Bagian Input Pelanggan (inputDataPelanggan): Menerima ID dan Nama pelanggan.",
-            "2. Bagian Pemilihan & Validasi Film (tampilkanDaftarFilm, inputDanValidasiFilm): Menampilkan 5 film dan memvalidasi pilihan dengan do-while.",
-            "3. Bagian Input Durasi & Lama Pinjam (inputDurasiDanLamaPinjam): Menerima durasi sewa (1-7 hari) dan lama pinjam aktual.",
-            "4. Bagian Perhitungan Biaya & Denda (hitungSewaDanDenda): Menghitung biaya sewa, mengecek keterlambatan (if-else), dan menghitung denda (for).",
-            "5. Bagian Pembayaran (prosesPembayaran): Memvalidasi uang bayar dan menghitung kembalian.",
-            "6. Bagian Output (tampilkanBuktiRental, tampilkanStatusSemuaFilm): Mencetak struk bukti rental dan status ketersediaan film.",
-            "7. Bagian Pengujian & Pengulangan (pengujianOtomatis, main): Menguji kasus tepat waktu/terlambat dan mengulang transaksi."
+            "1. Definisi Data Film (#define): Menyimpan judul, harga sewa, dan status stok 5 film serta tarif denda Rp2.000/hari.",
+            "2. Bagian Input Pelanggan (Mahasiswa 1): Menerima input ID pelanggan (int) dan Nama pelanggan (char[]).",
+            "3. Bagian Daftar & Validasi Film (Mahasiswa 1): Menampilkan tabel 5 film dan memvalidasi pilihan dengan do-while & switch-case.",
+            "4. Bagian Lama Sewa & Perpanjangan (Mahasiswa 2): Menerima lama pinjam dan opsi perpanjangan durasi (if jawab == 'y').",
+            "5. Bagian Perhitungan Biaya & Denda (Mahasiswa 2): Menghitung biaya sewa dan mengecek keterlambatan (if-else hariKembali > lama).",
+            "6. Bagian Output Bukti Rental (Mahasiswa 3): Menampilkan struk bukti rental lengkap beserta total bayar dan status."
         ],
         accent_hex="0284C7", font_size=12
     )
@@ -538,22 +519,24 @@ def build_slides():
         emu_in(0.55), emu_in(1.42), emu_in(6.1), emu_in(5.45),
         "3.3 Cuplikan Kode Inti (rental_film.c)",
         [
-            {"text": "/* Validasi pilihan film dengan do-while (Mhs 1) */", "size": 10, "font": "Consolas", "color": "059669"},
+            {"text": "/* Validasi pilihan film (do-while & switch) */", "size": 10, "font": "Consolas", "color": "059669"},
             {"text": "do {", "size": 10, "font": "Consolas"},
-            {"text": "    printf(\"Pilih nomor film (1-5): \");", "size": 10, "font": "Consolas"},
-            {"text": "    hasilBaca = scanf(\"%d\", &pilihanFilm);", "size": 10, "font": "Consolas"},
-            {"text": "    if (pilihanFilm < 1 || pilihanFilm > 5)", "size": 10, "font": "Consolas"},
-            {"text": "        valid = 0;", "size": 10, "font": "Consolas"},
-            {"text": "    else if (cekFilmTersedia(pilihanFilm) == 0)", "size": 10, "font": "Consolas"},
-            {"text": "        valid = 0;", "size": 10, "font": "Consolas"},
-            {"text": "    else valid = 1;", "size": 10, "font": "Consolas"},
-            {"text": "} while (valid == 0);", "size": 10, "font": "Consolas", "space_after": 6},
-            {"text": "/* Perhitungan denda dengan for & if-else (Mhs 2) */", "size": 10, "font": "Consolas", "color": "059669"},
-            {"text": "denda = 0;", "size": 10, "font": "Consolas"},
-            {"text": "for (hariKe = 1; hariKe <= hariTerlambat; hariKe++) {", "size": 10, "font": "Consolas"},
-            {"text": "    if (hariKe <= 3) denda = denda + 5000;", "size": 10, "font": "Consolas"},
-            {"text": "    else             denda = denda + 10000;", "size": 10, "font": "Consolas"},
-            {"text": "}", "size": 10, "font": "Consolas"},
+            {"text": "    valid = 0;", "size": 10, "font": "Consolas"},
+            {"text": "    printf(\"\\nPilih nomor film (1-5): \");", "size": 10, "font": "Consolas"},
+            {"text": "    scanf(\"%d\", &pilih);", "size": 10, "font": "Consolas"},
+            {"text": "    switch (pilih) {", "size": 10, "font": "Consolas"},
+            {"text": "        case 1: if (STOK1) { strcpy(judul, JUDUL1);", "size": 10, "font": "Consolas"},
+            {"text": "                harga = HARGA1; valid = 1; }", "size": 10, "font": "Consolas"},
+            {"text": "                else printf(\"Film sedang dipinjam!\\n\"); break;", "size": 10, "font": "Consolas"},
+            {"text": "        /* ... case 2 s/d 5 ... */", "size": 10, "font": "Consolas"},
+            {"text": "    }", "size": 10, "font": "Consolas"},
+            {"text": "} while (!valid);", "size": 10, "font": "Consolas", "space_after": 6},
+            {"text": "/* Perhitungan biaya & denda (if-else) */", "size": 10, "font": "Consolas", "color": "059669"},
+            {"text": "biaya = harga * lama;", "size": 10, "font": "Consolas"},
+            {"text": "if (hariKembali > lama) {", "size": 10, "font": "Consolas"},
+            {"text": "    denda = (hariKembali - lama) * DENDA_PER_HARI;", "size": 10, "font": "Consolas"},
+            {"text": "    strcpy(status, \"Terlambat\");", "size": 10, "font": "Consolas"},
+            {"text": "} else { denda = 0; strcpy(status, \"Tepat waktu\"); }", "size": 10, "font": "Consolas"},
         ],
         accent_hex="0F172A", bg_hex="F1F5F9"
     )
@@ -562,12 +545,12 @@ def build_slides():
         emu_in(6.85), emu_in(1.42), emu_in(5.8), emu_in(5.45),
         "3.4 Penjelasan Komponen Kode Program",
         [
-            "if & if-else : Memilih judul/harga film (1-5), menentukan status TEPAT WAKTU vs TERLAMBAT, serta membedakan tarif denda hari ke-1..3 (Rp 5.000) dan hari ke-4 dst (Rp 10.000).",
-            "while : Digunakan pada fungsi bersihkanInput() untuk membuang sisa karakter newline di buffer stdin.",
-            "do-while : Mengulang menu utama, perulangan transaksi, serta validasi input nomor film, durasi sewa, dan uang pembayaran.",
-            "for : Mengakumulasi denda per hari keterlambatan dan menampilkan daftar status kelima film.",
-            "Variabel & Operator : Menggunakan tipe int, long, char; operator aritmatika (*, +, -), relasional (<, >, <=, ==), dan logika (||, &&).",
-            "Input / Output : Menggunakan printf() dan scanf() dari <stdio.h>."
+            "if : Mengecek apakah pelanggan ingin memperpanjang lama peminjaman (jawab == 'y' || jawab == 'Y').",
+            "if-else : Mengecek ketersediaan stok film (STOK1..5) serta menentukan apakah pengembalian Terlambat (hariKembali > lama) atau Tepat waktu.",
+            "switch-case : Memilih data film ke-1 sampai ke-5 berdasarkan nomor yang diinput pelanggan.",
+            "do-while : Mengulang input pemilihan film selama pilihan tidak valid atau film sedang dipinjam (!valid).",
+            "Variabel & Operator : Menggunakan tipe int dan char[]; operator aritmatika (*, +, -, +=), relasional (>), logika (||, !), dan ternary (?:).",
+            "Input / Output : Menggunakan printf(), scanf(), dan strcpy()."
         ],
         accent_hex="0284C7", font_size=12
     )
@@ -584,16 +567,16 @@ def build_slides():
         "4.1 Mahasiswa 1 — Data & Film",
         [
             "Nama / NRP : ................................",
-            "Tugas Utama:",
+            "Tugas:",
             "• Input ID dan nama pelanggan",
-            "• Menampilkan daftar pilihan film",
+            "• Menampilkan daftar 5 pilihan film",
             "• Input & validasi pilihan film",
-            "• Menerapkan perulangan do-while",
-            "Fungsi yang Dikerjakan:",
-            "• inputDataPelanggan()",
-            "• tampilkanDaftarFilm()",
-            "• inputDanValidasiFilm()",
-            "Integrasi: Menyediakan data pelanggan & film valid untuk diproses Mahasiswa 2."
+            "• Menggunakan perulangan do-while",
+            "Bagian Kode:",
+            "• Konstanta #define JUDUL1..5, HARGA1..5, STOK1..5",
+            "• Input id & nama pelanggan",
+            "• Tabel daftar film & blok do-while + switch(pilih)",
+            "Integrasi: Menyediakan variabel judul & harga film terpilih untuk Mahasiswa 2."
         ],
         accent_hex="0284C7", font_size=11
     )
@@ -603,37 +586,35 @@ def build_slides():
         "4.2 Mahasiswa 2 — Sewa & Denda",
         [
             "Nama / NRP : ................................",
-            "Tugas Utama:",
-            "• Menentukan biaya sewa film",
-            "• Menghitung lama peminjaman",
+            "Tugas:",
+            "• Menentukan biaya sewa",
+            "• Menghitung lama peminjaman & perpanjangan",
             "• Menghitung denda keterlambatan",
             "• Menentukan status pengembalian",
-            "• Menerapkan if-else & perulangan for",
-            "Fungsi yang Dikerjakan:",
-            "• inputDurasiDanLamaPinjam()",
-            "• hitungSewaDanDenda()",
-            "• prosesPembayaran()",
-            "Integrasi: Mengolah biaya, denda, & status untuk dicetak Mahasiswa 3."
+            "Bagian Kode:",
+            "• Input lama & perpanjangan (if jawab == 'y')",
+            "• Input hariKembali & hitung biaya = harga * lama",
+            "• Blok if-else (hariKembali > lama) untuk denda & status",
+            "Integrasi: Menghasilkan nilai biaya, denda, & status untuk Mahasiswa 3."
         ],
         accent_hex="7C3AED", font_size=11
     )
 
     s9.add_card(
         emu_in(8.80), emu_in(1.45), emu_in(3.85), emu_in(5.4),
-        "4.3 Mahasiswa 3 — Output & Uji",
+        "4.3 Mahasiswa 3 — Transaksi & Uji",
         [
             "Nama / NRP : ................................",
-            "Tugas Utama:",
-            "• Menampilkan bukti rental lengkap",
-            "• Menampilkan rincian biaya & denda",
-            "• Menampilkan status ketersediaan film",
+            "Tugas:",
+            "• Menampilkan bukti rental",
+            "• Menampilkan biaya, denda, & total bayar",
+            "• Menampilkan status film / pengembalian",
             "• Menguji tepat waktu & terlambat",
-            "• Mengintegrasikan seluruh program",
-            "Fungsi yang Dikerjakan:",
-            "• tampilkanBuktiRental()",
-            "• tampilkanStatusSemuaFilm()",
-            "• pengujianOtomatis() & main()",
-            "Integrasi: Menyatukan modul Mhs 1 & 2 dalam menu utama interaktif."
+            "Bagian Kode:",
+            "• Blok pencetakan BUKTI RENTAL lengkap",
+            "• Integrasi variabel dari Mahasiswa 1 & 2 di main()",
+            "• Pengujian 5 skenario input & batas",
+            "Integrasi: Menyatukan seluruh bagian kode menjadi satu program utuh."
         ],
         accent_hex="059669", font_size=11
     )
@@ -643,34 +624,34 @@ def build_slides():
     # SLIDE 10: BAB V — PENGUJIAN PROGRAM (5.1 SKENARIO PENGUJIAN)
     # =========================================================================
     s10 = SlideBuilder()
-    s10.add_header("BAB V", "PENGUJIAN PROGRAM: 5 SKENARIO PENGUJIAN", "5.1 Tabel Skenario Pengujian (Valid, Tidak Valid, Nilai Batas, Pembayaran)", 10)
+    s10.add_header("BAB V", "PENGUJIAN PROGRAM: 5 SKENARIO PENGUJIAN", "5.1 Tabel Skenario Pengujian Program Rental Film", 10)
 
     scenarios = [
-        ("1. Input Valid (Tepat Waktu)",
-         "Film = 1 (Rp 8.000), Durasi = 3 hari, Lama Pinjam = 3 hari",
-         "Diharapkan: Biaya Rp 24.000, Denda Rp 0, Status TEPAT WAKTU",
-         "Aktual: Biaya Rp 24.000, Denda Rp 0, Status TEPAT WAKTU  [BERHASIL]",
+        ("1. Peminjaman Tepat Waktu",
+         "Pilih Film = 1 (Avengers Rp5000), Lama = 3 hari, Perpanjang = n, Kembali = hari ke-3",
+         "Diharapkan: Biaya Rp15000, Denda Rp0, Total Rp15000, Status: Tepat waktu",
+         "Aktual: Biaya Rp15000, Denda Rp0, Total Rp15000, Status: Tepat waktu  [BERHASIL]",
          "059669"),
-        ("2. Pilihan Film Tidak Valid",
-         "Input pilihanFilm = 9 (di luar rentang 1 s/d 5)",
-         "Diharapkan: Muncul pesan '[!] Error: Pilihan film tidak valid!' & minta ulang",
-         "Aktual: Pesan error tampil dan do-while meminta input ulang  [BERHASIL]",
+        ("2. Pilihan Nomor Tidak Valid",
+         "Pilih Nomor Film = 9 (di luar rentang 1-5)",
+         "Diharapkan: Muncul pesan 'Nomor tidak valid, ulangi!' dan meminta input ulang",
+         "Aktual: Muncul 'Nomor tidak valid, ulangi!' dan do-while mengulang input  [BERHASIL]",
          "0284C7"),
-        ("3. Nilai Batas & Terlambat",
-         "Film = 5 (Rp 9.000), Durasi = 2 hari, Lama = 7 hari (Telat 5 hari)",
-         "Diharapkan: Biaya Rp 18.000, Denda Rp 35.000 (3x5rb + 2x10rb), Total Rp 53.000",
-         "Aktual: Biaya Rp 18.000, Denda Rp 35.000, Total Rp 53.000, TERLAMBAT  [BERHASIL]",
-         "7C3AED"),
-        ("4. Pembayaran Kurang",
-         "Total Tagihan = Rp 24.000, Input uangBayar = Rp 10.000",
-         "Diharapkan: Pembayaran ditolak & diminta memasukkan nominal yang cukup",
-         "Aktual: Muncul '[!] Error: Uang pembayaran kurang!' & diulang  [BERHASIL]",
+        ("3. Pilih Film Sedang Dipinjam",
+         "Pilih Nomor Film = 3 (Interstellar, STOK3 = 0 / Dipinjam)",
+         "Diharapkan: Ditolak dengan pesan 'Film sedang dipinjam, pilih yang lain!'",
+         "Aktual: Pesan tampil dan pengguna diminta memilih film lain  [BERHASIL]",
          "D97706"),
-        ("5. Pembayaran Lebih (Kembalian)",
-         "Total Tagihan = Rp 24.000, Input uangBayar = Rp 30.000",
-         "Diharapkan: Pembayaran diterima & Kembalian dihitung Rp 6.000",
-         "Aktual: Kembalian tercetak Rp 6.000 pada Bukti Rental  [BERHASIL]",
-         "0F172A"),
+        ("4. Perpanjangan Masa Sewa",
+         "Pilih Film = 2 (Rp6000), Lama awal = 2 hari, Perpanjang = y (+2 hari), Kembali = hari ke-4",
+         "Diharapkan: Lama pinjam jadi 4 hari, Biaya Rp24000, Denda Rp0, Status: Tepat waktu",
+         "Aktual: Lama pinjam 4 hari, Biaya Rp24000, Denda Rp0, Tepat waktu  [BERHASIL]",
+         "7C3AED"),
+        ("5. Pengembalian Terlambat",
+         "Pilih Film = 5 (Inception Rp6500), Lama = 2 hari, Perpanjang = n, Kembali = hari ke-5",
+         "Diharapkan: Terlambat 3 hari -> Denda Rp6000, Biaya Rp13000, Total Rp19000, Terlambat",
+         "Aktual: Biaya Rp13000, Denda Rp6000, Total Rp19000, Status: Terlambat  [BERHASIL]",
+         "DC2626"),
     ]
 
     for idx, (sc_title, sc_in, sc_exp, sc_act, color) in enumerate(scenarios):
@@ -693,54 +674,55 @@ def build_slides():
     # SLIDE 11: BAB V — BUKTI PENGUJIAN PROGRAM (5.2 OUTPUT TERMINAL)
     # =========================================================================
     s11 = SlideBuilder()
-    s11.add_header("BAB V", "BUKTI PENGUJIAN: OUTPUT TEPAT WAKTU & TERLAMBAT", "5.2 Bukti Running Program pada Menu Pengujian Otomatis", 11)
+    s11.add_header("BAB V", "BUKTI PENGUJIAN: OUTPUT TEPAT WAKTU & TERLAMBAT", "5.2 Hasil Running Program rental_film.c", 11)
 
     s11.add_card(
         emu_in(0.55), emu_in(1.42), emu_in(5.9), emu_in(5.45),
         "Pengujian 1 — Peminjaman Tepat Waktu",
         [
-            {"text": "================================================", "size": 10, "font": "Consolas", "color": "38BDF8"},
-            {"text": "               BUKTI RENTAL FILM", "size": 10, "bold": True, "font": "Consolas", "color": "FFFFFF"},
-            {"text": "================================================", "size": 10, "font": "Consolas", "color": "38BDF8"},
-            {"text": "ID Pelanggan      : P001", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": "Nama Pelanggan    : Budi Santoso", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": "Film Disewa       : Avengers: Endgame (F001)", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": "Harga Sewa / Hari : Rp 8000", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": "Durasi Sewa       : 3 hari", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": "Lama Peminjaman   : 3 hari (Terlambat: 0 hari)", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": "------------------------------------------------", "size": 10, "font": "Consolas", "color": "64748B"},
-            {"text": "Biaya Sewa        : Rp 24000", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": "Denda Terlambat   : Rp 0", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": "TOTAL BAYAR       : Rp 24000 (Bayar: Rp 30000)", "size": 10, "bold": True, "font": "Consolas", "color": "4ADE80"},
-            {"text": "Kembalian         : Rp 6000", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": "Status Kembali    : TEPAT WAKTU", "size": 10, "bold": True, "font": "Consolas", "color": "4ADE80"},
-            {"text": "Status Film       : Tersedia (Sudah Dikembalikan)", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": ">> HASIL UJI 1 (TEPAT WAKTU): BERHASIL / LULUS", "size": 10, "bold": True, "font": "Consolas", "color": "38BDF8"},
+            {"text": "Masukkan ID pelanggan   : 101", "size": 10, "font": "Consolas", "color": "CBD5E1"},
+            {"text": "Masukkan nama pelanggan : Budi Santoso", "size": 10, "font": "Consolas", "color": "CBD5E1"},
+            {"text": "Pilih nomor film (1-5)  : 1", "size": 10, "font": "Consolas", "color": "CBD5E1"},
+            {"text": "Anda memilih: Avengers: Endgame (Rp5000/hari)", "size": 10, "font": "Consolas", "color": "38BDF8"},
+            {"text": "Lama peminjaman (hari)  : 3", "size": 10, "font": "Consolas", "color": "CBD5E1"},
+            {"text": "Perpanjang peminjaman? (y/n): n", "size": 10, "font": "Consolas", "color": "CBD5E1"},
+            {"text": "Film dikembalikan pada hari ke-: 3", "size": 10, "font": "Consolas", "color": "CBD5E1", "space_after": 6},
+            {"text": "========== BUKTI RENTAL ==========", "size": 10, "bold": True, "font": "Consolas", "color": "4ADE80"},
+            {"text": "ID / Nama    : 101 / Budi Santoso", "size": 10, "font": "Consolas", "color": "FFFFFF"},
+            {"text": "Film         : Avengers: Endgame", "size": 10, "font": "Consolas", "color": "FFFFFF"},
+            {"text": "Biaya/hari   : Rp5000", "size": 10, "font": "Consolas", "color": "FFFFFF"},
+            {"text": "Lama pinjam  : 3 hari", "size": 10, "font": "Consolas", "color": "FFFFFF"},
+            {"text": "Dikembalikan : hari ke-3", "size": 10, "font": "Consolas", "color": "FFFFFF"},
+            {"text": "Biaya sewa   : Rp15000", "size": 10, "font": "Consolas", "color": "FFFFFF"},
+            {"text": "Denda        : Rp0", "size": 10, "font": "Consolas", "color": "FFFFFF"},
+            {"text": "Total bayar  : Rp15000", "size": 10, "bold": True, "font": "Consolas", "color": "4ADE80"},
+            {"text": "Status       : Tepat waktu", "size": 10, "bold": True, "font": "Consolas", "color": "4ADE80"},
+            {"text": "==================================", "size": 10, "font": "Consolas", "color": "4ADE80"},
         ],
         accent_hex="059669", bg_hex="0F172A"
     )
 
     s11.add_card(
         emu_in(6.75), emu_in(1.42), emu_in(5.9), emu_in(5.45),
-        "Pengujian 2 — Peminjaman Terlambat",
+        "Pengujian 2 — Validasi Stok & Pengembalian Terlambat",
         [
-            {"text": "================================================", "size": 10, "font": "Consolas", "color": "F87171"},
-            {"text": "               BUKTI RENTAL FILM", "size": 10, "bold": True, "font": "Consolas", "color": "FFFFFF"},
-            {"text": "================================================", "size": 10, "font": "Consolas", "color": "F87171"},
-            {"text": "ID Pelanggan      : P002", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": "Nama Pelanggan    : Siti Aminah", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": "Film Disewa       : Interstellar (F005)", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": "Harga Sewa / Hari : Rp 9000", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": "Durasi Sewa       : 2 hari", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": "Lama Peminjaman   : 7 hari (Terlambat: 5 hari)", "size": 10, "font": "Consolas", "color": "FCA5A5"},
-            {"text": "------------------------------------------------", "size": 10, "font": "Consolas", "color": "64748B"},
-            {"text": "Biaya Sewa        : Rp 18000", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": "Denda Terlambat   : Rp 35000 (3x5rb + 2x10rb)", "size": 10, "font": "Consolas", "color": "FCA5A5"},
-            {"text": "TOTAL BAYAR       : Rp 53000 (Bayar: Rp 60000)", "size": 10, "bold": True, "font": "Consolas", "color": "FBBF24"},
-            {"text": "Kembalian         : Rp 7000", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": "Status Kembali    : TERLAMBAT", "size": 10, "bold": True, "font": "Consolas", "color": "F87171"},
-            {"text": "Status Film       : Tersedia (Sudah Dikembalikan)", "size": 10, "font": "Consolas", "color": "E2E8F0"},
-            {"text": ">> HASIL UJI 2 (TERLAMBAT)  : BERHASIL / LULUS", "size": 10, "bold": True, "font": "Consolas", "color": "38BDF8"},
+            {"text": "Masukkan ID pelanggan   : 102", "size": 10, "font": "Consolas", "color": "CBD5E1"},
+            {"text": "Masukkan nama pelanggan : Siti Aminah", "size": 10, "font": "Consolas", "color": "CBD5E1"},
+            {"text": "Pilih nomor film (1-5)  : 3", "size": 10, "font": "Consolas", "color": "CBD5E1"},
+            {"text": "Film sedang dipinjam, pilih yang lain!", "size": 10, "font": "Consolas", "color": "F87171"},
+            {"text": "Pilih nomor film (1-5)  : 5", "size": 10, "font": "Consolas", "color": "CBD5E1"},
+            {"text": "Lama peminjaman: 2 | Perpanjang: n | Kembali: hari ke-5", "size": 10, "font": "Consolas", "color": "CBD5E1", "space_after": 6},
+            {"text": "========== BUKTI RENTAL ==========", "size": 10, "bold": True, "font": "Consolas", "color": "F87171"},
+            {"text": "ID / Nama    : 102 / Siti Aminah", "size": 10, "font": "Consolas", "color": "FFFFFF"},
+            {"text": "Film         : Inception", "size": 10, "font": "Consolas", "color": "FFFFFF"},
+            {"text": "Biaya/hari   : Rp6500", "size": 10, "font": "Consolas", "color": "FFFFFF"},
+            {"text": "Lama pinjam  : 2 hari", "size": 10, "font": "Consolas", "color": "FFFFFF"},
+            {"text": "Dikembalikan : hari ke-5", "size": 10, "font": "Consolas", "color": "FCA5A5"},
+            {"text": "Biaya sewa   : Rp13000", "size": 10, "font": "Consolas", "color": "FFFFFF"},
+            {"text": "Denda        : Rp6000", "size": 10, "font": "Consolas", "color": "FCA5A5"},
+            {"text": "Total bayar  : Rp19000", "size": 10, "bold": True, "font": "Consolas", "color": "FBBF24"},
+            {"text": "Status       : Terlambat", "size": 10, "bold": True, "font": "Consolas", "color": "F87171"},
+            {"text": "==================================", "size": 10, "font": "Consolas", "color": "F87171"},
         ],
         accent_hex="DC2626", bg_hex="0F172A"
     )
@@ -756,12 +738,11 @@ def build_slides():
         emu_in(0.55), emu_in(1.45), emu_in(5.9), emu_in(5.4),
         "6.1 Hasil & 6.2 Penerapan Struktur Kontrol",
         [
-            "Hasil Program: Program berhasil berjalan secara interaktif, memvalidasi input, menghitung sewa & denda, dan menampilkan bukti rental dengan tepat.",
-            "if : Mengecek validitas input dan kecukupan pembayaran.",
-            "if-else : Menentukan harga film (1-5), menentukan status TEPAT WAKTU vs TERLAMBAT, dan memilih tarif denda harian.",
-            "while : Membersihkan sisa karakter input pada buffer stdin.",
-            "do-while : Mengulang input saat tidak valid & mengulang transaksi.",
-            "for : Mengakumulasi denda per hari keterlambatan & mencetak daftar film."
+            "Hasil Program: Program berhasil memvalidasi pilihan film, menghitung perpanjangan sewa, menghitung denda keterlambatan, dan menampilkan bukti rental.",
+            "if : Mengecek apakah pengguna memilih perpanjangan sewa (jawab == 'y' || jawab == 'Y').",
+            "if-else : Mengecek stok film (STOK1..5) serta menentukan denda dan status ('Terlambat' vs 'Tepat waktu').",
+            "switch-case : Memilih film ke-1 s/d ke-5 berdasarkan input pengguna.",
+            "do-while : Mengulang input pilihan film selama nomor tidak valid atau film sedang dipinjam (!valid)."
         ],
         accent_hex="0284C7", font_size=12
     )
@@ -770,14 +751,12 @@ def build_slides():
         emu_in(6.75), emu_in(1.45), emu_in(5.9), emu_in(5.4),
         "6.3 Kendala dan Solusi Selama Pengerjaan",
         [
-            "Kendala 1: Input pilihan film di luar nomor 1-5 atau film sedang dipinjam.",
-            "Solusi 1 : Menambahkan validasi bertingkat di dalam perulangan do-while.",
-            "Kendala 2: Menyimpan status 5 film tanpa menggunakan array maupun struct.",
-            "Solusi 2 : Menggunakan 5 variabel global (film1_tersedia s/d film5_tersedia) dan fungsi pemilihan if-else.",
-            "Kendala 3: Uang pembayaran kurang dari total biaya sewa + denda.",
-            "Solusi 3 : Menambahkan pengecekan if (uangBayar < totalBayar) di dalam do-while agar pengguna mengulang pembayaran.",
-            "Kendala 4: Program langsung tertutup setelah 1 transaksi selesai.",
-            "Solusi 4 : Membungkus menu utama dan transaksi dengan perulangan do-while."
+            "Kendala 1: Pengguna memilih nomor film di luar 1-5 atau film yang sedang dipinjam (STOK = 0).",
+            "Solusi 1 : Menggunakan perulangan do-while dengan variabel penanda valid dan percabangan switch-case.",
+            "Kendala 2: Menyimpan data 5 film tanpa menggunakan array maupun struct.",
+            "Solusi 2 : Mendefinisikan konstanta makro #define JUDUL1..5, HARGA1..5, dan STOK1..5 di bagian atas program.",
+            "Kendala 3: Membaca nama pelanggan yang mengandung spasi menggunakan scanf.",
+            "Solusi 3 : Menggunakan format spesifikasi scanf(\" %[^\\n]\", nama) agar spasi ikut terbaca."
         ],
         accent_hex="7C3AED", font_size=12
     )
@@ -793,9 +772,9 @@ def build_slides():
         emu_in(0.55), emu_in(1.45), emu_in(5.9), emu_in(3.3),
         "7.1 Kesimpulan",
         [
-            "Seluruh tujuan mini project telah tercapai dengan baik.",
-            "Program Sistem Rental Film dalam bahasa C berhasil menerapkan struktur kontrol if, if-else, while, do-while, dan for tanpa menggunakan array data, struct, maupun pointer.",
-            "Kolaborasi Mahasiswa 1, 2, dan 3 terintegrasi dengan baik dan seluruh skenario pengujian (Tepat Waktu & Terlambat) dinyatakan LULUS."
+            "Seluruh tujuan mini project telah tercapai.",
+            "Program Sistem Rental Film berhasil dibangun menggunakan bahasa C dengan menerapkan do-while, switch-case, if, dan if-else tanpa menggunakan array data, struct, maupun pointer.",
+            "Program berhasil memvalidasi pilihan film, menghitung biaya sewa dan denda keterlambatan, serta menampilkan bukti rental dengan tepat."
         ],
         accent_hex="059669", font_size=12
     )
@@ -804,9 +783,9 @@ def build_slides():
         emu_in(6.75), emu_in(1.45), emu_in(5.9), emu_in(3.3),
         "7.2 Saran Pengembangan (Tahap Berikutnya)",
         [
-            "Menggunakan ARRAY untuk menampung lebih banyak katalog film dan riwayat transaksi pelanggan secara dinamis.",
-            "Menggunakan STRUCT untuk mengelompokkan data Pelanggan, Film, dan Transaksi agar kode lebih rapi dan modular.",
-            "Menggunakan POINTER untuk manipulasi data antar-fungsi secara efisien serta penyimpanan ke file eksternal."
+            "Pada tahap selanjutnya, program dapat dikembangkan untuk menyimpan banyak data film dan pelanggan menggunakan ARRAY.",
+            "Data pelanggan, film, dan transaksi dapat dikelompokkan menggunakan STRUCT.",
+            "Manipulasi dan pengelolaan data selanjutnya dapat dioptimalkan menggunakan POINTER."
         ],
         accent_hex="0284C7", font_size=12
     )
@@ -817,7 +796,7 @@ def build_slides():
         [
             "1. Kernighan, B. W., & Ritchie, D. M. (1988). The C Programming Language (2nd ed.). Prentice Hall.",
             "2. Modul Praktikum & Materi Kuliah Pemrograman Dasar Tahun 2026.",
-            "3. Dokumentasi C Standard Library (<stdio.h>) — https://en.cppreference.com/w/c"
+            "3. Dokumentasi C Standard Library (<stdio.h> & <string.h>) — https://en.cppreference.com/w/c"
         ],
         accent_hex="0F172A", font_size=12
     )
@@ -829,7 +808,6 @@ def build_slides():
 def create_pptx(filename, slides):
     num_slides = len(slides)
 
-    # 1. [Content_Types].xml
     slide_overrides = "\n".join(
         f'  <Override PartName="/ppt/slides/slide{i}.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slide+xml"/>'
         for i in range(1, num_slides + 1)
@@ -848,13 +826,11 @@ def create_pptx(filename, slides):
 {slide_overrides}
 </Types>"""
 
-    # 2. _rels/.rels
     root_rels_xml = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
   <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="ppt/presentation.xml"/>
 </Relationships>"""
 
-    # 3. ppt/presentation.xml
     sld_id_entries = "\n".join(
         f'    <p:sldId id="{255 + i}" r:id="rId{i + 1}"/>'
         for i in range(1, num_slides + 1)
@@ -874,7 +850,6 @@ def create_pptx(filename, slides):
   <p:notesSz cx="{SLIDE_H}" cy="{SLIDE_W}"/>
 </p:presentation>"""
 
-    # 4. ppt/_rels/presentation.xml.rels
     slide_rels = "\n".join(
         f'  <Relationship Id="rId{i + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide" Target="slides/slide{i}.xml"/>'
         for i in range(1, num_slides + 1)
@@ -890,7 +865,6 @@ def create_pptx(filename, slides):
   <Relationship Id="rId{p_top + 3}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/tableStyles" Target="tableStyles.xml"/>
 </Relationships>"""
 
-    # 5. Slide Master & Layout
     slide_master_xml = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <p:sldMaster xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
              xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
@@ -1001,7 +975,7 @@ def create_pptx(filename, slides):
             zf.writestr(f"ppt/slides/slide{idx}.xml", slide.to_xml())
             zf.writestr(f"ppt/slides/_rels/slide{idx}.xml.rels", slide_rel_xml)
 
-    print(f"Berhasil membuat {filename} ({num_slides} slide)!")
+    print(f"Berhasil memperbarui {filename} ({num_slides} slide)!")
 
 
 if __name__ == "__main__":
