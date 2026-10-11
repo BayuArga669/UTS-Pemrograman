@@ -1,0 +1,361 @@
+<mxfile host="app.diagrams.net" modified="2026-10-11T22:26:00.000Z" agent="Kelompok 3" version="22.0.0" type="device">
+  <diagram id="flowchart-rental-film" name="Flowchart Sistem Rental Film">
+    <mxGraphModel dx="1200" dy="2400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="2200" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- ============================================ -->
+        <!-- SECTION LABELS                               -->
+        <!-- ============================================ -->
+        <mxCell id="sec1" value="MAHASISWA 1: Data Pelanggan &amp; Film" style="text;html=1;fontSize=13;fontStyle=1;fillColor=#DBEAFE;strokeColor=#1E40AF;rounded=1;arcSize=20;fontColor=#1E40AF;align=center;verticalAlign=middle;spacingLeft=8;spacingRight=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="30" width="280" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="sec2" value="MAHASISWA 2: Proses Sewa &amp; Denda" style="text;html=1;fontSize=13;fontStyle=1;fillColor=#F3E8FF;strokeColor=#7C3AED;rounded=1;arcSize=20;fontColor=#6B21A8;align=center;verticalAlign=middle;spacingLeft=8;spacingRight=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="960" width="280" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="sec3" value="MAHASISWA 3: Transaksi &amp; Pengujian" style="text;html=1;fontSize=13;fontStyle=1;fillColor=#D1FAE5;strokeColor=#059669;rounded=1;arcSize=20;fontColor=#065F46;align=center;verticalAlign=middle;spacingLeft=8;spacingRight=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1790" width="280" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 1. MULAI (Terminal / Stadium)                -->
+        <!-- ============================================ -->
+        <mxCell id="n1" value="&lt;b&gt;MULAI&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#0F172A;fontColor=#FFFFFF;strokeColor=#38BDF8;strokeWidth=2;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="325" y="30" width="200" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 2. Input ID & Nama (I/O Parallelogram)       -->
+        <!-- ============================================ -->
+        <mxCell id="n2" value="Input &lt;b&gt;id&lt;/b&gt; pelanggan&lt;br&gt;Input &lt;b&gt;nama&lt;/b&gt; pelanggan" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=20;fillColor=#EFF6FF;strokeColor=#3B82F6;strokeWidth=2;fontSize=12;fontColor=#1E3A5F;" vertex="1" parent="1">
+          <mxGeometry x="290" y="120" width="270" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 1→2 -->
+        <mxCell id="a1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0284C7;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="n1" target="n2" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 3. Tampilkan Daftar Film (Process)           -->
+        <!-- ============================================ -->
+        <mxCell id="n3" value="Tampilkan &lt;b&gt;DAFTAR FILM&lt;/b&gt;&lt;br&gt;(No, Nama Film, Biaya/Hari, Status)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#FFFFFF;strokeColor=#0284C7;strokeWidth=2;fontSize=12;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="290" y="225" width="270" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 2→3 -->
+        <mxCell id="a2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0284C7;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="n2" target="n3" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 4. valid = 0 (Process - loop init)           -->
+        <!-- ============================================ -->
+        <mxCell id="n4" value="&lt;font face=&quot;Consolas&quot;&gt;valid = 0;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#F1F5F9;strokeColor=#94A3B8;strokeWidth=2;fontSize=12;fontColor=#334155;" vertex="1" parent="1">
+          <mxGeometry x="340" y="330" width="170" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 3→4 -->
+        <mxCell id="a3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0284C7;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="n3" target="n4" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 5. Input pilih (I/O Parallelogram)           -->
+        <!-- ============================================ -->
+        <mxCell id="n5" value="Input &lt;b&gt;pilih&lt;/b&gt; (nomor film 1-5)" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=20;fillColor=#EFF6FF;strokeColor=#3B82F6;strokeWidth=2;fontSize=12;fontColor=#1E3A5F;" vertex="1" parent="1">
+          <mxGeometry x="290" y="415" width="270" height="55" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 4→5 -->
+        <mxCell id="a4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0284C7;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="n4" target="n5" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 6. Decision: switch(pilih) (Diamond)         -->
+        <!-- ============================================ -->
+        <mxCell id="n6" value="&lt;b&gt;switch&lt;/b&gt;&lt;br&gt;(pilih)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;strokeWidth=2;fontSize=12;fontColor=#92400E;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="355" y="515" width="140" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 5→6 -->
+        <mxCell id="a5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0284C7;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="n5" target="n6" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 7. Decision: STOK tersedia? (Diamond)        -->
+        <!-- ============================================ -->
+        <mxCell id="n7" value="&lt;b&gt;STOK&lt;/b&gt;&lt;br&gt;tersedia?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;strokeWidth=2;fontSize=11;fontColor=#92400E;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="535" width="120" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 6→7 (case 1-5, ke kiri) -->
+        <mxCell id="a6" value="&lt;font color=&quot;#059669&quot;&gt;&lt;b&gt;case 1-5&lt;/b&gt;&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#059669;strokeWidth=2;endArrow=blockThin;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontSize=11;" edge="1" source="n6" target="n7" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 8. default: "Nomor tidak valid" (Process)    -->
+        <!-- ============================================ -->
+        <mxCell id="n8" value="Cetak:&lt;br&gt;&lt;i&gt;&quot;Nomor tidak valid, ulangi!&quot;&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#FEF2F2;strokeColor=#DC2626;strokeWidth=2;fontSize=11;fontColor=#991B1B;" vertex="1" parent="1">
+          <mxGeometry x="580" y="545" width="200" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 6→8 (default, ke kanan) -->
+        <mxCell id="a7" value="&lt;font color=&quot;#DC2626&quot;&gt;&lt;b&gt;default&lt;/b&gt;&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#DC2626;strokeWidth=2;endArrow=blockThin;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=11;" edge="1" source="n6" target="n8" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 9. Simpan judul & harga, valid = 1           -->
+        <!-- ============================================ -->
+        <mxCell id="n9" value="&lt;font face=&quot;Consolas&quot; size=&quot;2&quot;&gt;strcpy(judul, JUDULn);&lt;br&gt;harga = HARGAn;&lt;br&gt;valid = 1;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#F0FDF4;strokeColor=#059669;strokeWidth=2;fontSize=11;fontColor=#065F46;" vertex="1" parent="1">
+          <mxGeometry x="100" y="690" width="200" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 7→9 (STOK = 1, ke bawah) -->
+        <mxCell id="a8" value="&lt;font color=&quot;#059669&quot;&gt;&lt;b&gt;STOK = 1&lt;/b&gt;&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#059669;strokeWidth=2;endArrow=blockThin;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=11;" edge="1" source="n7" target="n9" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 10. "Film sedang dipinjam" (Process)         -->
+        <!-- ============================================ -->
+        <mxCell id="n10" value="Cetak:&lt;br&gt;&lt;i&gt;&quot;Film sedang dipinjam,&lt;br&gt;pilih yang lain!&quot;&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#FEF2F2;strokeColor=#DC2626;strokeWidth=2;fontSize=11;fontColor=#991B1B;" vertex="1" parent="1">
+          <mxGeometry x="390" y="690" width="200" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 7→10 (STOK = 0, ke kanan bawah) -->
+        <mxCell id="a9" value="&lt;font color=&quot;#DC2626&quot;&gt;&lt;b&gt;STOK = 0&lt;/b&gt;&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#DC2626;strokeWidth=2;endArrow=blockThin;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=11;" edge="1" source="n7" target="n10" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="320" y="585"/>
+              <mxPoint x="320" y="720"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- LOOP-BACK ARROWS (do-while !valid)           -->
+        <!-- ============================================ -->
+
+        <!-- Arrow 8 → loop back to n4 (default error) -->
+        <mxCell id="aL1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#94A3B8;strokeWidth=2;dashed=1;dashPattern=6 4;endArrow=blockThin;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="n8" target="n4" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="810" y="570"/>
+              <mxPoint x="810" y="350"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Arrow 10 → loop back to n4 (dipinjam error) -->
+        <mxCell id="aL2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#94A3B8;strokeWidth=2;dashed=1;dashPattern=6 4;endArrow=blockThin;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="n10" target="n4" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="810" y="720"/>
+              <mxPoint x="810" y="350"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Loop label -->
+        <mxCell id="loopLabel" value="&lt;font color=&quot;#64748B&quot;&gt;&lt;b&gt;do-while (!valid)&lt;/b&gt;&lt;/font&gt;" style="text;html=1;fontSize=11;align=center;verticalAlign=middle;rotation=-90;" vertex="1" parent="1">
+          <mxGeometry x="785" y="510" width="130" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 11. Tampilkan film terpilih (Output)         -->
+        <!-- ============================================ -->
+        <mxCell id="n11" value="Tampilkan film terpilih &amp; harga&lt;br&gt;&lt;font face=&quot;Consolas&quot; size=&quot;1&quot;&gt;printf(&quot;Anda memilih: %s (Rp%d/hari)&quot;)&lt;/font&gt;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=20;fillColor=#EFF6FF;strokeColor=#3B82F6;strokeWidth=2;fontSize=12;fontColor=#1E3A5F;" vertex="1" parent="1">
+          <mxGeometry x="260" y="820" width="330" height="55" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 9→11 -->
+        <mxCell id="a10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0284C7;strokeWidth=2;endArrow=blockThin;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="n9" target="n11" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="200" y="790"/>
+              <mxPoint x="425" y="790"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 12. Input lama (I/O Parallelogram)           -->
+        <!-- ============================================ -->
+        <mxCell id="n12" value="Input &lt;b&gt;lama&lt;/b&gt; peminjaman (hari)" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=20;fillColor=#EFF6FF;strokeColor=#3B82F6;strokeWidth=2;fontSize=12;fontColor=#1E3A5F;" vertex="1" parent="1">
+          <mxGeometry x="290" y="920" width="270" height="55" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 11→12 -->
+        <mxCell id="a11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0284C7;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="n11" target="n12" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 13. Decision: Perpanjang? (Diamond)          -->
+        <!-- ============================================ -->
+        <mxCell id="n13" value="&lt;b&gt;jawab&lt;/b&gt;&lt;br&gt;== &apos;y&apos; / &apos;Y&apos; ?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;strokeWidth=2;fontSize=11;fontColor=#92400E;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="1020" width="150" height="130" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 12→13 -->
+        <mxCell id="a12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0284C7;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="n12" target="n13" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 14. Ya: Input tambah, lama += tambah         -->
+        <!-- ============================================ -->
+        <mxCell id="n14" value="Input &lt;b&gt;tambah&lt;/b&gt; hari&lt;br&gt;&lt;font face=&quot;Consolas&quot;&gt;lama += tambah;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#F0FDF4;strokeColor=#059669;strokeWidth=2;fontSize=12;fontColor=#065F46;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1055" width="200" height="55" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 13→14 (Ya, ke kiri) -->
+        <mxCell id="a13" value="&lt;font color=&quot;#059669&quot;&gt;&lt;b&gt;Ya (y/Y)&lt;/b&gt;&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#059669;strokeWidth=2;endArrow=blockThin;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontSize=11;" edge="1" source="n13" target="n14" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 15. Input hariKembali (I/O)                  -->
+        <!-- ============================================ -->
+        <mxCell id="n15" value="Input &lt;b&gt;hariKembali&lt;/b&gt;&lt;br&gt;&lt;i&gt;&quot;Film dikembalikan pada hari ke-:&quot;&lt;/i&gt;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=20;fillColor=#EFF6FF;strokeColor=#3B82F6;strokeWidth=2;fontSize=12;fontColor=#1E3A5F;" vertex="1" parent="1">
+          <mxGeometry x="270" y="1200" width="310" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 13→15 (Tidak, ke bawah kanan) -->
+        <mxCell id="a14" value="&lt;font color=&quot;#DC2626&quot;&gt;&lt;b&gt;Tidak (n)&lt;/b&gt;&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#DC2626;strokeWidth=2;endArrow=blockThin;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontSize=11;" edge="1" source="n13" target="n15" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="630" y="1085"/>
+              <mxPoint x="630" y="1230"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Arrow 14→15 (merge dari Ya) -->
+        <mxCell id="a15" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0284C7;strokeWidth=2;endArrow=blockThin;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="n14" target="n15" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="190" y="1230"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 16. biaya = harga * lama (Process)           -->
+        <!-- ============================================ -->
+        <mxCell id="n16" value="&lt;font face=&quot;Consolas&quot; style=&quot;font-size:13px&quot;&gt;&lt;b&gt;biaya = harga * lama;&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#FFFFFF;strokeColor=#0284C7;strokeWidth=2;fontSize=13;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="300" y="1310" width="250" height="45" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 15→16 -->
+        <mxCell id="a16" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0284C7;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="n15" target="n16" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 17. Decision: hariKembali > lama? (Diamond)  -->
+        <!-- ============================================ -->
+        <mxCell id="n17" value="&lt;b&gt;hariKembali&lt;/b&gt;&lt;br&gt;&amp;gt; &lt;b&gt;lama&lt;/b&gt; ?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;strokeWidth=2;fontSize=12;fontColor=#92400E;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="345" y="1400" width="160" height="130" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 16→17 -->
+        <mxCell id="a17" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0284C7;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="n16" target="n17" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 18a. Ya: Terlambat (denda + status)          -->
+        <!-- ============================================ -->
+        <mxCell id="n18" value="&lt;font face=&quot;Consolas&quot; size=&quot;2&quot;&gt;denda = (hariKembali - lama)&lt;br&gt;        * DENDA_PER_HARI;&lt;br&gt;strcpy(status, &quot;Terlambat&quot;);&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#FEF2F2;strokeColor=#DC2626;strokeWidth=2;fontSize=11;fontColor=#991B1B;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1580" width="250" height="65" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 17→18a (Ya, ke kiri) -->
+        <mxCell id="a18" value="&lt;font color=&quot;#DC2626&quot;&gt;&lt;b&gt;Ya&lt;/b&gt;&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#DC2626;strokeWidth=2;endArrow=blockThin;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=12;" edge="1" source="n17" target="n18" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="205" y="1465"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 18b. Tidak: Tepat waktu (denda=0)            -->
+        <!-- ============================================ -->
+        <mxCell id="n19" value="&lt;font face=&quot;Consolas&quot; size=&quot;2&quot;&gt;denda = 0;&lt;br&gt;strcpy(status, &quot;Tepat waktu&quot;);&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#F0FDF4;strokeColor=#059669;strokeWidth=2;fontSize=11;fontColor=#065F46;" vertex="1" parent="1">
+          <mxGeometry x="530" y="1580" width="240" height="65" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 17→19 (Tidak, ke kanan) -->
+        <mxCell id="a19" value="&lt;font color=&quot;#059669&quot;&gt;&lt;b&gt;Tidak&lt;/b&gt;&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#059669;strokeWidth=2;endArrow=blockThin;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=12;" edge="1" source="n17" target="n19" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="650" y="1465"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 19. Cetak BUKTI RENTAL (Output)              -->
+        <!-- ============================================ -->
+        <mxCell id="n20" value="&lt;b style=&quot;color:#38BDF8;font-size:14px&quot;&gt;Cetak BUKTI RENTAL&lt;/b&gt;&lt;br&gt;&lt;br&gt;ID/Nama, Film, Biaya/hari,&lt;br&gt;Lama pinjam, Dikembalikan,&lt;br&gt;Biaya sewa, Denda,&lt;br&gt;&lt;b&gt;Total bayar&lt;/b&gt; (biaya + denda),&lt;br&gt;&lt;b&gt;Status&lt;/b&gt; (Tepat waktu / Terlambat)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#0F172A;strokeColor=#38BDF8;strokeWidth=2;fontSize=11;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="275" y="1720" width="300" height="140" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 18→20 (Terlambat → Bukti) -->
+        <mxCell id="a20" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0284C7;strokeWidth=2;endArrow=blockThin;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="n18" target="n20" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="205" y="1790"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Arrow 19→20 (Tepat waktu → Bukti) -->
+        <mxCell id="a21" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0284C7;strokeWidth=2;endArrow=blockThin;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="n19" target="n20" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="650" y="1790"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- 20. SELESAI (Terminal / Stadium)              -->
+        <!-- ============================================ -->
+        <mxCell id="n21" value="&lt;b&gt;SELESAI&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#0F172A;fontColor=#FFFFFF;strokeColor=#38BDF8;strokeWidth=2;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="325" y="1910" width="200" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow 20→21 -->
+        <mxCell id="a22" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0284C7;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" source="n20" target="n21" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================ -->
+        <!-- SECTION DIVIDER LINES                        -->
+        <!-- ============================================ -->
+        <mxCell id="div1" style="endArrow=none;dashed=1;dashPattern=8 6;strokeColor=#94A3B8;strokeWidth=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="40" y="810" as="sourcePoint"/>
+            <mxPoint x="810" y="810" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="div2" style="endArrow=none;dashed=1;dashPattern=8 6;strokeColor=#94A3B8;strokeWidth=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="40" y="1710" as="sourcePoint"/>
+            <mxPoint x="810" y="1710" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
